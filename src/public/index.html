@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChaiShow | Book Your Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <div class="container nav-content">
+        <div class="logo">ChaiShow</div>
+        <div id="nav-user-tools" class="hidden">
+          <button
+            class="btn-outline"
+            style="padding: 6px 15px; font-size: 0.8rem"
+            onclick="showView('loginView')"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="loginView" class="view">
+        <div class="card">
+          <h2>Welcome Back</h2>
+          <p class="subtitle">Enter your credentials to access your account.</p>
+          <form id="loginForm" action="#">
+            <div class="form-group">
+              <label for="loginEmail">Email Address</label>
+              <input
+                type="email"
+                id="loginEmail"
+                name="email"
+                required
+                placeholder="name@example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                required
+                placeholder="••••••••"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+          </form>
+          <a class="toggle-link"
+            >New here?
+            <span onclick="showView('registerView')">Create an Account</span></a
+          >
+        </div>
+      </section>
+
+      <section id="registerView" class="view hidden">
+        <div class="card">
+          <h2>Create Account</h2>
+          <p class="subtitle">Join the Chaicode cinema community.</p>
+          <form id="registerForm" action="#">
+            <div class="form-group">
+              <label for="regName">Full Name</label>
+              <input
+                type="text"
+                id="regName"
+                name="fullname"
+                required
+                placeholder="John Doe"
+              />
+            </div>
+            <div class="form-group">
+              <label for="regEmail">Email Address</label>
+              <input
+                type="email"
+                id="regEmail"
+                name="email"
+                required
+                placeholder="john@example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label for="regPass">Password</label>
+              <input
+                type="password"
+                id="regPass"
+                name="password"
+                required
+                placeholder="••••••••"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Register Now</button>
+          </form>
+          <a class="toggle-link"
+            >Already have an account?
+            <span onclick="showView('loginView')">Login</span></a
+          >
+        </div>
+      </section>
+
+      <section id="profileView" class="view hidden">
+        <div class="card" style="max-width: 600px">
+          <h2>Welcome, <span style="color: var(--primary)">User</span></h2>
+          <p class="subtitle">Manage your profile and bookings below.</p>
+
+          <div
+            style="
+              border-top: 1px solid #333;
+              padding-top: 2rem;
+              margin-top: 2rem;
+            "
+          >
+            <button class="btn btn-primary" onclick="showView('seatView')">
+              Book New Tickets
+            </button>
+
+            <div style="margin-top: 3rem">
+              <h3
+                style="
+                  font-size: 0.9rem;
+                  color: var(--danger);
+                  margin-bottom: 1rem;
+                "
+              >
+                Destructive Actions
+              </h3>
+              <form action="/api/delete-account" method="POST">
+                <button type="submit" class="btn btn-danger">
+                  Delete Account Permanently
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="seatView" class="view hidden">
+        <div class="cinema-container">
+          <div class="screen"></div>
+
+          <div class="grid-container" id="seatingGrid"></div>
+
+          <div class="legend">
+            <div class="legend-item">
+              <div class="seat"></div>
+              Available
+            </div>
+            <div class="legend-item">
+              <div class="seat selected"></div>
+              Selected
+            </div>
+            <div class="legend-item">
+              <div class="seat booked"></div>
+              Sold
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <div>
+              <p style="font-size: 0.8rem; color: var(--text-secondary)">
+                Selection
+              </p>
+              <p id="seatCount" style="font-weight: 700; color: var(--primary)">
+                0 Seats Selected
+              </p>
+            </div>
+            <form id="bookingForm" action="/api/book" method="POST">
+              <input
+                type="hidden"
+                name="selectedSeats"
+                id="selectedSeatsInput"
+              />
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="padding: 12px 40px"
+              >
+                Proceed to Pay
+              </button>
+            </form>
+          </div>
+          <button
+            class="btn-outline"
+            style="margin-top: 2rem; width: auto; padding: 10px 20px"
+            onclick="showView('profileView')"
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-overlay" id="successModal">
+      <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h2>Booking Done!</h2>
+        <p>
+          Your seats have been successfully reserved. A confirmation has been
+          sent to your email.
+        </p>
+        <button class="btn-confirm" onclick="closeModal()">
+          Return to Dashboard
+        </button>
+      </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>

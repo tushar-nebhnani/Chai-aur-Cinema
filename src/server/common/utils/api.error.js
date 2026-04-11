@@ -4,7 +4,7 @@ class APIError extends Error {
     this.statusCode = statusCode;
     Error.captureStackTrace(this, this.constructor);
   }
-  static notFound(message = "Required data not found") {
+  static badRequest(message = "Required data not found") {
     return new APIError(404, message);
   }
 

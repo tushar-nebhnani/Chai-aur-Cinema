@@ -31,4 +31,4 @@ const run = (sql, params = []) => {
   });
 };
 
-export { query, run };
+export { db, query, run };

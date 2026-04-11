@@ -1,4 +1,4 @@
-// All the table creating of files goes here
+// All the table creating of files goes here: This file is only supposed to do major schema changes in the DB for any manipulation we will use the scripts folder
 import { db } from "./db.config.js";
 
 const initializeDatabase = async () => {

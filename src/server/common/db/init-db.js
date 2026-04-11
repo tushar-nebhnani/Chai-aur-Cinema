@@ -13,7 +13,6 @@ const initializeDatabase = async () => {
                 email TEXT UNIQUE NOT NULL,
                 password_hash TEXT NOT NULL,
                 is_verified BOOLEAN DEFAULT FALSE,
-                token_version INTEGER DEFAULT 1,
                 reset_token TEXT,
                 token_expiry TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP

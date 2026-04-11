@@ -1,7 +1,8 @@
-import "sqlite3";
+// need to study this whole code again used AI to set up the sqlite DB
+import sqlite3 from "sqlite3";
 import path from "path";
 
-const dbPath = path.join(__dirname, "./database.sqlite");
+const dbPath = path.join(import.meta.dirname, "./database.sqlite");
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {

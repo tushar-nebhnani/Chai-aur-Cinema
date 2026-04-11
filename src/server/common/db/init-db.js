@@ -19,7 +19,7 @@ const initializeDatabase = async () => {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         `);
-    console.log("✅ Users table created.");
+    // console.log("✅ Users table created.");
 
     // 2. Shows Table (Changed SERIAL to INTEGER PRIMARY KEY AUTOINCREMENT, VARCHAR to TEXT)
     await db.run(`
@@ -29,7 +29,7 @@ const initializeDatabase = async () => {
                 start_time DATETIME NOT NULL
             )
         `);
-    console.log("✅ Shows table created.");
+    // console.log("✅ Shows table created.");
 
     // 3. Seats Table (Changed SERIAL to INTEGER, INT to INTEGER)
     await db.run(`
@@ -42,7 +42,7 @@ const initializeDatabase = async () => {
                 UNIQUE(show_id, seat_number) 
             )
         `);
-    console.log("✅ Seats table created.");
+    // console.log("✅ Seats table created.");
 
     // 4. Bookings Table (Changed SERIAL to INTEGER, INT to INTEGER)
     await db.run(`
@@ -54,13 +54,11 @@ const initializeDatabase = async () => {
                 booking_time DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         `);
-    console.log("✅ Bookings table created.");
+    // console.log("✅ Bookings table created.");
 
     console.log("🎉 Database setup complete!");
-    process.exit(0);
   } catch (error) {
     console.error("❌ Error initializing database:", error);
-    process.exit(1);
   }
 };
 

@@ -5,12 +5,12 @@ import JWTtokens from "../../../common/utils/jwt.utils.js";
 
 const loginService = async (email, password, device = "Unknown device") => {
   try {
-    const sql = `SELECT * FROM users WHERE email=$1ß`;
+    const sql = `SELECT * FROM users WHERE email=$1`;
     const result = await pool.query(sql, [email]);
     const user = result.rows[0];
 
     if (!user) {
-      APIError.notAuthorised("Invalid email or password.");
+      throw APIError.notAuthorised("Invalid email or password.");
     }
 
     const isPasswordValid = await PasswordUtils.compare(
@@ -18,7 +18,7 @@ const loginService = async (email, password, device = "Unknown device") => {
       user.password_hash,
     );
     if (!isPasswordValid) {
-      APIError.notAuthorised(
+      throw APIError.notAuthorised(
         "Password incorrect. Please enter the password again.",
       );
     }

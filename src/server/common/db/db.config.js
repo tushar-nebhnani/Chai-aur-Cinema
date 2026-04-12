@@ -1,35 +1,20 @@
-// need to study this whole code again used AI to set up the sqlite DB
-import sqlite3 from "sqlite3";
-import path from "path";
+import pg from "pg";
+import "dotenv/config";
+const { Pool } = pg;
 
-const dbPath = path.join(import.meta.dirname, "./database.sqlite");
-
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error("Error opening SQLite database:", err.message);
-  } else {
-    console.log("Successfully connected to SQLite database!");
-  }
+const pool = new Pool({
+  connectionString: process.env.DB_URI,
+  max: 20,
+  idleTimeoutMillis: 30000,
 });
 
-// FOR DQL
-const query = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve({ rows });
-    });
-  });
-};
+pool.on("connect", () => {
+  console.log("✅ Connected to the BookMyShow Database Pool");
+});
 
-// FOR DML
-const run = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve({ id: this.lastID, changes: this.changes });
-    });
-  });
-};
+pool.on("error", (err) => {
+  console.error("❌ Unexpected error on idle client", err);
+  process.exit(-1);
+});
 
-export { db, query, run };
+export default pool;

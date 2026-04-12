@@ -1,5 +1,4 @@
 import APIError from "../../../common/utils/api.error.js";
-import { run } from "../../../common/db/db.config.js";
 import JWTtokens from "../../../common/utils/jwt.utils.js";
 import PasswordUtils from "../../../common/utils/password.utils.js";
 

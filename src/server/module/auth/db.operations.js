@@ -1,5 +1,4 @@
 // only this file is responsible for talking to the DB
-import { query } from "../../common/db/db.config.js";
 import APIError from "../../common/utils/api.error.js";
 
 class DBoperations {

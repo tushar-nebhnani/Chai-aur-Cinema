@@ -1,218 +1,678 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChaiShow | Book Your Experience</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <title>ChaiCode Cinema</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link href="./css/style.css" rel="stylesheet" />
   </head>
   <body>
-    <header>
-      <div class="container nav-content">
-        <div class="logo">ChaiShow</div>
-        <div id="nav-user-tools" class="hidden">
-          <button
-            class="btn-outline"
-            style="padding: 6px 15px; font-size: 0.8rem"
-            onclick="showView('loginView')"
-          >
-            Logout
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-ic">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M4 6h16M4 10h16M4 14h8"
+              stroke="#fff"
+              stroke-width="2.2"
+              stroke-linecap="round"
+            />
+            <path
+              d="M15 17l3 3 5-5"
+              stroke="#fff"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        Chai<span>Code</span> Cinema
+      </div>
+      <div class="nav-r">
+        <button class="tbtn" id="themeBtn" title="Toggle theme">☀</button>
+        <div id="authBtns">
+          <button class="btn-n" onclick="openAuthModal('login')">
+            Sign In
           </button>
+          <button class="btn-nr" onclick="openAuthModal('register')">
+            Register
+          </button>
+        </div>
+        <div id="userChip" class="uchip" style="display: none">
+          <div class="uav" id="uAv">?</div>
+          <span class="unm" id="uNm"></span>
+          <button class="btn-out" onclick="logout()">Sign out</button>
         </div>
       </div>
-    </header>
+    </nav>
 
-    <main class="container">
-      <section id="loginView" class="view">
-        <div class="card">
-          <h2>Welcome Back</h2>
-          <p class="subtitle">Enter your credentials to access your account.</p>
-          <form id="loginForm" action="#">
-            <div class="form-group">
-              <label for="loginEmail">Email Address</label>
-              <input
-                type="email"
-                id="loginEmail"
-                name="email"
-                required
-                placeholder="name@example.com"
-              />
-            </div>
-            <div class="form-group">
-              <label for="loginPassword">Password</label>
-              <input
-                type="password"
-                id="loginPassword"
-                name="password"
-                required
-                placeholder="••••••••"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Sign In</button>
-          </form>
-          <a class="toggle-link"
-            >New here?
-            <span onclick="showView('registerView')">Create an Account</span></a
-          >
+    <div class="banner">
+      <div class="poster">
+        <div class="poster-in">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#fff" stroke-width="1.5" />
+            <path d="M10 8l6 4-6 4V8z" fill="#fff" />
+          </svg>
         </div>
-      </section>
-
-      <section id="registerView" class="view hidden">
-        <div class="card">
-          <h2>Create Account</h2>
-          <p class="subtitle">Join the Chaicode cinema community.</p>
-          <form id="registerForm" action="#">
-            <div class="form-group">
-              <label for="regName">Full Name</label>
-              <input
-                type="text"
-                id="regName"
-                name="fullname"
-                required
-                placeholder="John Doe"
-              />
-            </div>
-            <div class="form-group">
-              <label for="regEmail">Email Address</label>
-              <input
-                type="email"
-                id="regEmail"
-                name="email"
-                required
-                placeholder="john@example.com"
-              />
-            </div>
-            <div class="form-group">
-              <label for="regPass">Password</label>
-              <input
-                type="password"
-                id="regPass"
-                name="password"
-                required
-                placeholder="••••••••"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Register Now</button>
-          </form>
-          <a class="toggle-link"
-            >Already have an account?
-            <span onclick="showView('loginView')">Login</span></a
-          >
+      </div>
+      <div class="minfo">
+        <div class="mtitle">Interstellar: Remastered</div>
+        <div class="mtags">
+          <span class="tag red">U/A</span>
+          <span class="tag">2h 49m</span>
+          <span class="tag">English</span>
+          <span class="tag">IMAX 4K</span>
+          <span class="tag gold">&#9733; 8.7</span>
         </div>
-      </section>
-
-      <section id="profileView" class="view hidden">
-        <div class="card" style="max-width: 600px">
-          <h2>Welcome, <span style="color: var(--primary)">User</span></h2>
-          <p class="subtitle">Manage your profile and bookings below.</p>
-
-          <div
-            style="
-              border-top: 1px solid #333;
-              padding-top: 2rem;
-              margin-top: 2rem;
-            "
-          >
-            <button class="btn btn-primary" onclick="showView('seatView')">
-              Book New Tickets
-            </button>
-
-            <div style="margin-top: 3rem">
-              <h3
-                style="
-                  font-size: 0.9rem;
-                  color: var(--danger);
-                  margin-bottom: 1rem;
-                "
-              >
-                Destructive Actions
-              </h3>
-              <form action="/api/delete-account" method="POST">
-                <button type="submit" class="btn btn-danger">
-                  Delete Account Permanently
-                </button>
-              </form>
-            </div>
-          </div>
+        <div class="strow">
+          <span class="stlbl">Today &rsaquo;</span>
+          <button class="stb active">10:00 AM</button>
+          <button class="stb">01:30 PM</button>
+          <button class="stb">04:45 PM</button>
+          <button class="stb">08:00 PM</button>
         </div>
-      </section>
-
-      <section id="seatView" class="view hidden">
-        <div class="cinema-container">
-          <div class="screen"></div>
-
-          <div class="grid-container" id="seatingGrid"></div>
-
-          <div class="legend">
-            <div class="legend-item">
-              <div class="seat"></div>
-              Available
-            </div>
-            <div class="legend-item">
-              <div class="seat selected"></div>
-              Selected
-            </div>
-            <div class="legend-item">
-              <div class="seat booked"></div>
-              Sold
-            </div>
-          </div>
-
-          <div class="action-bar">
-            <div>
-              <p style="font-size: 0.8rem; color: var(--text-secondary)">
-                Selection
-              </p>
-              <p id="seatCount" style="font-weight: 700; color: var(--primary)">
-                0 Seats Selected
-              </p>
-            </div>
-            <form id="bookingForm" action="/api/book" method="POST">
-              <input
-                type="hidden"
-                name="selectedSeats"
-                id="selectedSeatsInput"
-              />
-              <button
-                type="submit"
-                class="btn btn-primary"
-                style="padding: 12px 40px"
-              >
-                Proceed to Pay
-              </button>
-            </form>
-          </div>
-          <button
-            class="btn-outline"
-            style="margin-top: 2rem; width: auto; padding: 10px 20px"
-            onclick="showView('profileView')"
+        <div class="venue">
+          <svg
+            width="11"
+            height="11"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           >
-            ← Back to Dashboard
-          </button>
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Inox: PVR Nashik Central &middot; Nashik, Maharashtra
         </div>
-      </section>
-    </main>
-
-    <div class="modal-overlay" id="successModal">
-      <div class="success-card">
-        <div class="success-icon">✓</div>
-        <h2>Booking Done!</h2>
-        <p>
-          Your seats have been successfully reserved. A confirmation has been
-          sent to your email.
-        </p>
-        <button class="btn-confirm" onclick="closeModal()">
-          Return to Dashboard
-        </button>
       </div>
     </div>
 
+    <main class="main">
+      <div class="scr-w">
+        <div class="scr"></div>
+        <div class="scr-t">All eyes this way please</div>
+      </div>
+      <div id="seatMap"></div>
+      <div class="legend">
+        <div class="li">
+          <div class="ls av"></div>
+          Available
+        </div>
+        <div class="li">
+          <div class="ls pm"></div>
+          Premium
+        </div>
+        <div class="li">
+          <div class="ls sl"></div>
+          Selected
+        </div>
+        <div class="li">
+          <div class="ls bk"></div>
+          Booked
+        </div>
+      </div>
+    </main>
+
+    <div class="bbar" id="bbar">
+      <div>
+        <div class="bst" id="bSeats">0 tickets</div>
+        <div class="bprice" id="bPrice">&#8377;0</div>
+      </div>
+      <button class="btn-pay" id="payBtn" onclick="handleConfirm()">
+        Pay Now
+      </button>
+    </div>
+
+    <div class="ov" id="promptOv">
+      <div class="modal" style="max-width: 340px">
+        <button class="mx" onclick="closeModal('promptOv')">&#x2715;</button>
+        <div class="picon">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--red)"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <div class="ptitle">Login to book seats</div>
+        <div class="pdesc">
+          Create a free account or sign in to pick your seats and complete your
+          booking.
+        </div>
+        <div class="pbtns">
+          <button
+            class="btn-sub"
+            onclick="
+              closeModal('promptOv');
+              openAuthModal('login');
+            "
+          >
+            Sign In
+          </button>
+          <button
+            class="btn-gf"
+            onclick="
+              closeModal('promptOv');
+              openAuthModal('register');
+            "
+          >
+            Create Account &mdash; It&apos;s Free
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ov" id="authOv">
+      <div class="modal">
+        <button class="mx" onclick="closeModal('authOv')">&#x2715;</button>
+        <div class="mlogo">Chai<span>Code</span> Cinema</div>
+        <div class="msub" id="authSub">Your next movie experience awaits.</div>
+        <div class="tabs">
+          <button class="tab active" id="tLogin" onclick="switchTab('login')">
+            Sign In
+          </button>
+          <button class="tab" id="tReg" onclick="switchTab('register')">
+            Register
+          </button>
+        </div>
+        <form id="loginForm" onsubmit="doLogin(event)" novalidate>
+          <div class="fg">
+            <label class="fl" for="lEmail">Email</label>
+            <input
+              class="fi"
+              type="email"
+              id="lEmail"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+            <div class="ferr" id="lEmailErr">Enter a valid email address.</div>
+          </div>
+          <div class="fg">
+            <label class="fl" for="lPw">Password</label>
+            <div class="pw-w">
+              <input
+                class="fi"
+                type="password"
+                id="lPw"
+                placeholder="Your password"
+                autocomplete="current-password"
+              />
+              <button type="button" class="eye" onclick="togglePw('lPw', this)">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <div class="ferr" id="lPwErr">
+              Password must be at least 6 characters.
+            </div>
+          </div>
+          <div class="ferr" id="lGenErr" style="margin-bottom: 6px"></div>
+          <button type="submit" class="btn-sub" id="lBtn">Sign In</button>
+        </form>
+        <form
+          id="regForm"
+          style="display: none"
+          onsubmit="doRegister(event)"
+          novalidate
+        >
+          <div class="fg">
+            <label class="fl" for="rName">Full Name</label>
+            <input
+              class="fi"
+              type="text"
+              id="rName"
+              placeholder="Hitesh Choudhary"
+              autocomplete="name"
+            />
+            <div class="ferr" id="rNameErr">
+              Name must be at least 2 characters.
+            </div>
+          </div>
+          <div class="fg">
+            <label class="fl" for="rEmail">Email</label>
+            <input
+              class="fi"
+              type="email"
+              id="rEmail"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+            <div class="ferr" id="rEmailErr">Enter a valid email address.</div>
+          </div>
+          <div class="fg">
+            <label class="fl" for="rPw">Password</label>
+            <div class="pw-w">
+              <input
+                class="fi"
+                type="password"
+                id="rPw"
+                placeholder="Min. 6 characters"
+                autocomplete="new-password"
+              />
+              <button type="button" class="eye" onclick="togglePw('rPw', this)">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <div class="ferr" id="rPwErr">
+              Password must be at least 6 characters.
+            </div>
+          </div>
+          <div class="fg">
+            <label class="fl" for="rCf">Confirm Password</label>
+            <div class="pw-w">
+              <input
+                class="fi"
+                type="password"
+                id="rCf"
+                placeholder="Repeat password"
+                autocomplete="new-password"
+              />
+              <button type="button" class="eye" onclick="togglePw('rCf', this)">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <div class="ferr" id="rCfErr">Passwords don&apos;t match.</div>
+          </div>
+          <div class="ferr" id="rGenErr" style="margin-bottom: 6px"></div>
+          <button type="submit" class="btn-sub" id="rBtn">
+            Create Account
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">
+      <div class="tdot"></div>
+      <span id="toastTxt"></span>
+    </div>
+
+    <script>
+      let currentUser = null,
+        seats = [],
+        selected = new Set();
+      const PRICE_STD = 220,
+        PRICE_PREM = 380,
+        PREMIUM = ["A", "B"],
+        ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"],
+        COLS = 10;
+
+      function renderSkeleton() {
+        const m = document.getElementById("seatMap");
+        let h = "";
+        ROWS.forEach((r) => {
+          if (r === "A")
+            h += `<div class="sec-h p">&#9733; Premium &mdash; &#8377;${PRICE_PREM}</div>`;
+          if (r === "C")
+            h += `<div class="sec-h">Standard &mdash; &#8377;${PRICE_STD}</div>`;
+          h += `<div class="seat-row"><div class="rlbl">${r}</div>`;
+          for (let c = 0; c < COLS; c++) {
+            if (c === 5) h += `<div class="seat gap"></div>`;
+            h += `<div class="skel"></div>`;
+          }
+          h += "</div>";
+        });
+        m.innerHTML = h;
+      }
+
+      async function fetchSeats() {
+        renderSkeleton();
+        try {
+          const r = await fetch("/seats");
+          if (!r.ok) throw 0;
+          seats = await r.json();
+        } catch {
+          seats = mockSeats();
+        }
+        renderGrid();
+      }
+
+      function mockSeats() {
+        return ROWS.flatMap((row) =>
+          Array.from({ length: COLS }, (_, i) => ({
+            id: `${row}${i + 1}`,
+            row,
+            col: i + 1,
+            bookedBy: Math.random() < 0.28 ? "Someone" : null,
+            isPremium: PREMIUM.includes(row),
+          })),
+        );
+      }
+
+      function renderGrid() {
+        const m = document.getElementById("seatMap");
+        const byRow = {};
+        seats.forEach((s) => {
+          if (!byRow[s.row]) byRow[s.row] = [];
+          byRow[s.row].push(s);
+        });
+        let h = "";
+        ROWS.forEach((row) => {
+          if (row === "A")
+            h += `<div class="sec-h p">&#9733; Premium &mdash; &#8377;${PRICE_PREM}</div>`;
+          if (row === "C")
+            h += `<div class="sec-h">Standard &mdash; &#8377;${PRICE_STD}</div>`;
+          const rs = (byRow[row] || []).sort((a, b) => a.col - b.col);
+          h += `<div class="seat-row"><div class="rlbl">${row}</div>`;
+          rs.forEach((s, i) => {
+            if (i === 5) h += `<div class="seat gap" aria-hidden="true"></div>`;
+            const bk = !!s.bookedBy,
+              sel = selected.has(s.id),
+              pr = PREMIUM.includes(s.row);
+            let cls = "seat";
+            if (bk) cls += " booked";
+            else if (sel) cls += " selected";
+            else if (pr) cls += " premium";
+            h += `<div class="${cls}" data-id="${s.id}" title="${bk ? "Booked" : "Seat " + s.id + (pr ? " (Premium)" : "")}" role="button" tabindex="${bk ? -1 : 0}" onclick="seatClick('${s.id}')"></div>`;
+          });
+          h += "</div>";
+        });
+        m.innerHTML = h;
+      }
+
+      function seatClick(id) {
+        const s = seats.find((x) => x.id === id);
+        if (!s || s.bookedBy) return;
+        if (!currentUser) {
+          openModal("promptOv");
+          return;
+        }
+        selected.has(id) ? selected.delete(id) : selected.add(id);
+        updateBar();
+        const el = document.querySelector(`[data-id="${id}"]`);
+        if (!el) return;
+        el.className =
+          "seat" +
+          (selected.has(id)
+            ? " selected"
+            : PREMIUM.includes(s.row)
+              ? " premium"
+              : "");
+      }
+
+      function updateBar() {
+        const bar = document.getElementById("bbar"),
+          n = selected.size;
+        if (!n) {
+          bar.classList.remove("show");
+          return;
+        }
+        let total = 0;
+        selected.forEach((id) => {
+          const s = seats.find((x) => x.id === id);
+          total += PREMIUM.includes(s?.row) ? PRICE_PREM : PRICE_STD;
+        });
+        document.getElementById("bSeats").textContent =
+          `${n} ticket${n > 1 ? "s" : ""} \u00b7 ${[...selected].join(", ")}`;
+        document.getElementById("bPrice").textContent =
+          `\u20b9${total.toLocaleString("en-IN")}`;
+        bar.classList.add("show");
+      }
+
+      async function handleConfirm() {
+        if (!currentUser || !selected.size) return;
+        const btn = document.getElementById("payBtn");
+        btn.innerHTML = '<span class="spin"></span>';
+        btn.disabled = true;
+        const ids = [...selected];
+        for (const id of ids) {
+          try {
+            const r = await fetch(
+              `/${id}/${encodeURIComponent(currentUser.name)}`,
+              { method: "PUT" },
+            );
+            if (!r.ok) throw 0;
+          } catch {}
+          const s = seats.find((x) => x.id === id);
+          if (s) s.bookedBy = currentUser.name;
+          selected.delete(id);
+        }
+        btn.innerHTML = "Pay Now";
+        btn.disabled = false;
+        updateBar();
+        renderGrid();
+        showToast(
+          "success",
+          `Booking confirmed! ${ids.length} seat${ids.length > 1 ? "s" : ""} reserved.`,
+        );
+      }
+
+      function doLogin(e) {
+        e.preventDefault();
+        clearErrs("l");
+        const email = document.getElementById("lEmail").value.trim(),
+          pw = document.getElementById("lPw").value;
+        let ok = true;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showErr("lEmailErr");
+          ok = false;
+        }
+        if (pw.length < 6) {
+          showErr("lPwErr");
+          ok = false;
+        }
+        if (!ok) return;
+        const btn = document.getElementById("lBtn");
+        btn.innerHTML = '<span class="spin"></span>';
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.innerHTML = "Sign In";
+          btn.disabled = false;
+          const name = email
+            .split("@")[0]
+            .replace(/[._]/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase());
+          loginUser({ name, email });
+          closeModal("authOv");
+          showToast("success", `Welcome back, ${name.split(" ")[0]}!`);
+        }, 750);
+      }
+
+      function doRegister(e) {
+        e.preventDefault();
+        clearErrs("r");
+        const name = document.getElementById("rName").value.trim(),
+          email = document.getElementById("rEmail").value.trim(),
+          pw = document.getElementById("rPw").value,
+          cf = document.getElementById("rCf").value;
+        let ok = true;
+        if (name.length < 2) {
+          showErr("rNameErr");
+          ok = false;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showErr("rEmailErr");
+          ok = false;
+        }
+        if (pw.length < 6) {
+          showErr("rPwErr");
+          ok = false;
+        }
+        if (pw !== cf) {
+          showErr("rCfErr");
+          ok = false;
+        }
+        if (!ok) return;
+        const btn = document.getElementById("rBtn");
+        btn.innerHTML = '<span class="spin"></span>';
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.innerHTML = "Create Account";
+          btn.disabled = false;
+          loginUser({ name, email });
+          closeModal("authOv");
+          showToast(
+            "success",
+            `Welcome, ${name.split(" ")[0]}! Enjoy the show.`,
+          );
+        }, 850);
+      }
+
+      function loginUser(u) {
+        currentUser = u;
+        document.getElementById("authBtns").style.display = "none";
+        document.getElementById("userChip").style.display = "flex";
+        document.getElementById("uNm").textContent = u.name.split(" ")[0];
+        document.getElementById("uAv").textContent = u.name
+          .split(" ")
+          .map((w) => w[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase();
+        renderGrid();
+      }
+
+      function logout() {
+        currentUser = null;
+        selected.clear();
+        document.getElementById("authBtns").style.display = "flex";
+        document.getElementById("userChip").style.display = "none";
+        updateBar();
+        renderGrid();
+        showToast("info", "Signed out successfully.");
+      }
+
+      function togglePw(id, btn) {
+        const el = document.getElementById(id),
+          hide = el.type === "text";
+        el.type = hide ? "password" : "text";
+        btn.innerHTML = hide
+          ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+          : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+      }
+
+      function openModal(id) {
+        document.getElementById(id).classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      function openAuthModal(tab) {
+        switchTab(tab);
+        openModal("authOv");
+      }
+
+      function switchTab(tab) {
+        const lg = tab === "login";
+        document.getElementById("loginForm").style.display = lg ? "" : "none";
+        document.getElementById("regForm").style.display = lg ? "none" : "";
+        document.getElementById("tLogin").classList.toggle("active", lg);
+        document.getElementById("tReg").classList.toggle("active", !lg);
+        document.getElementById("authSub").textContent = lg
+          ? "Your next movie experience awaits."
+          : "Join free \u2014 no spam, we promise.";
+        clearErrs("l");
+        clearErrs("r");
+      }
+
+      function showErr(id) {
+        document.getElementById(id).classList.add("show");
+      }
+
+      function clearErrs(p) {
+        document
+          .querySelectorAll(`[id^="${p}"][id$="Err"]`)
+          .forEach((e) => e.classList.remove("show"));
+      }
+
+      let toastT;
+      function showToast(type, msg) {
+        const t = document.getElementById("toast");
+        t.className = `toast ${type}`;
+        document.getElementById("toastTxt").textContent = msg;
+        t.classList.add("show");
+        clearTimeout(toastT);
+        toastT = setTimeout(() => t.classList.remove("show"), 3200);
+      }
+
+      document.querySelectorAll(".ov").forEach((o) =>
+        o.addEventListener("click", (e) => {
+          if (e.target === o) closeModal(o.id);
+        }),
+      );
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape")
+          document
+            .querySelectorAll(".ov.open")
+            .forEach((o) => closeModal(o.id));
+      });
+
+      document.querySelectorAll(".stb").forEach((b) =>
+        b.addEventListener("click", function () {
+          document
+            .querySelectorAll(".stb")
+            .forEach((x) => x.classList.remove("active"));
+          this.classList.add("active");
+          selected.clear();
+          updateBar();
+          fetchSeats();
+        }),
+      );
+
+      document.getElementById("themeBtn").addEventListener("click", () => {
+        const dark =
+          document.documentElement.getAttribute("data-theme") === "dark";
+        document.documentElement.setAttribute(
+          "data-theme",
+          dark ? "light" : "dark",
+        );
+        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀";
+      });
+
+      fetchSeats();
+    </script>
     <script src="./js/script.js"></script>
   </body>
 </html>

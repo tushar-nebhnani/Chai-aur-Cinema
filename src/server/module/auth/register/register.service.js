@@ -1,5 +1,6 @@
 import APIError from "../../../common/utils/api.error.js";
 import JWTtokens from "../../../common/utils/jwt.utils.js";
+import pool from "../../../common/db/db.config.js";
 import PasswordUtils from "../../../common/utils/password.utils.js";
 
 const registerService = async (username, email, password) => {
@@ -16,33 +17,25 @@ const registerService = async (username, email, password) => {
   const formattedExpiry = expiryDate.toISOString();
 
   try {
-    const sql = `INSERT INTO users ( full_name ,
-                email   ,
-                password_hash ,
-                is_verified ,
-                reset_token,
-                token_expiry)
-        VALUES (?, ?, ?, 0, ?, ?)`;
+    const sql = `
+      INSERT INTO users (full_name, email, password_hash, is_verified, reset_token, token_expiry)
+      VALUES ($1, $2, $3, false, $4, $5)
+      RETURNING user_id;
+    `;
 
-    const result = await run(sql, [
-      username,
-      email,
-      hashPass,
-      hashedToken,
-      formattedExpiry,
-    ]);
+    const values = [username, email, hashPass, hashedToken, formattedExpiry];
+
+    const result = await pool.query(sql, values);
 
     return {
-      userId: result.id,
+      userId: result.rows[0].user_id,
       email: email,
       verificationToken: rawToken,
     };
   } catch (error) {
     console.error(`Error in registering the user`, error);
 
-    if (error.message.includes("UNIQUE constraint failed")) {
-      throw APIError.conflict("A user with this email already exists.");
-    }
+    throw error;
   }
 };
 

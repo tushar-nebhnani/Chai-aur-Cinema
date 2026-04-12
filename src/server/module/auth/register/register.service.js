@@ -1,15 +1,8 @@
-import APIError from "../../../common/utils/api.error.js";
 import JWTtokens from "../../../common/utils/jwt.utils.js";
 import pool from "../../../common/db/db.config.js";
 import PasswordUtils from "../../../common/utils/password.utils.js";
 
 const registerService = async (username, email, password) => {
-  if (!username || !email || !password) {
-    throw APIError.badRequest(
-      "Username, email and password are necessary for login.",
-    );
-  }
-
   const hashPass = await PasswordUtils.hash(password);
   const { rawToken, hashedToken } = JWTtokens.generateResetToken();
   const expiryDate = new Date();

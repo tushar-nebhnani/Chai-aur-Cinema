@@ -13,6 +13,12 @@ import {
   checkExistingUsername,
 } from "./module/auth/register/register.middleware.js";
 
+// login-service
+import LoginDTO from "./module/auth/login/login.dto.js";
+import loginController from "./module/auth/login/login.controller.js";
+import checkEmptyParams from "./module/auth/login/login.middleware.js";
+
+// register-service
 router.post(
   "/register",
   authLimiter,
@@ -20,6 +26,15 @@ router.post(
   checkExistingEmail,
   checkExistingUsername,
   registerController,
+);
+
+// login-service
+router.post(
+  "/login",
+  authLimiter,
+  validate(LoginDTO),
+  checkEmptyParams,
+  loginController,
 );
 
 export default router;

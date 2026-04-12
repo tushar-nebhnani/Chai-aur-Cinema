@@ -7,22 +7,22 @@ class DBoperations {
     if (!email) {
       throw APIError.notFound("Required email not found.");
     }
-    const sql = `SELECT * FROM users WHERE email=${email}`;
 
-    const result = query(sql, [email]);
+    const sql = `SELECT * FROM users WHERE email = ?`;
+    const result = await query(sql, [email]);
 
-    return result[0];
+    return result.rows[0];
   };
 
   static getUserByUsername = async (username) => {
-    if (!email) {
-      throw APIError.notFound("Required email not found.");
+    if (!username) {
+      throw APIError.notFound("Required username not found.");
     }
-    const sql = `SELECT * FROM users WHERE username=${username}`;
 
-    const result = query(sql, [email]);
+    const sql = `SELECT * FROM users WHERE full_name = ?`;
+    const result = await query(sql, [username]);
 
-    return result[0];
+    return result.rows[0];
   };
 }
 

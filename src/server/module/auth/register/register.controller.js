@@ -6,7 +6,7 @@ const registerController = async (req, res) => {
 
   const user = await registerService(username, email, password);
 
-  APIResponse.created(`User with ${email} registered successfully`, user);
+  APIResponse.created(res, `User with ${email} registered successfully`, user);
 };
 
 export default registerController;

@@ -54,6 +54,8 @@ const registerForm = document.getElementById("registerForm");
 const bookingForm = document.getElementById("bookingForm");
 const successModal = document.getElementById("successModal");
 
+const API_BASE_URL = "http://localhost:4000";
+
 // Simple transition from Auth to Profile for preview
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -67,7 +69,7 @@ loginForm.addEventListener("submit", async (e) => {
   const password = document.getElementById("loginPassword").value;
 
   try {
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,19 +108,17 @@ registerForm.addEventListener("submit", async (e) => {
   const password = document.getElementById("regPass").value;
 
   try {
-    const response = await fetch("/api/auth/register", {
+    const response = await fetch(`${API_BASE_URL}/bookmyshow/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: fullname,
+        username: fullname,
         email: email,
         password: password,
       }),
     });
-
-    const data = await response.json();
 
     if (response.ok) {
       alert("Registration successful! Please sign in.");

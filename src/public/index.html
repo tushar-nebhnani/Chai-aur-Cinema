@@ -9,6 +9,123 @@
       rel="stylesheet"
     />
     <link href="./css/style.css" rel="stylesheet" />
+
+    <style>
+      .f-pw {
+        text-align: right;
+        margin-top: -12px;
+        margin-bottom: 16px;
+      }
+      .f-pw a {
+        color: var(--primary);
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .f-pw a:hover {
+        color: var(--primary-hover);
+        text-decoration: underline;
+      }
+
+      .uchip {
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .uchip:hover {
+        border-color: var(--primary);
+        box-shadow: 0 0 10px var(--primary-glow);
+      }
+
+      .admin-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-height: 350px;
+        overflow-y: auto;
+        padding-right: 8px;
+      }
+      .admin-list::-webkit-scrollbar {
+        width: 6px;
+      }
+      .admin-list::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 10px;
+      }
+
+      .u-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--surface-hover);
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+      }
+      .u-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .u-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--text-main);
+      }
+      .u-email {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+      .u-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        background: var(--primary-glow);
+        color: var(--primary);
+        margin-left: 8px;
+      }
+
+      .u-acts {
+        display: flex;
+        gap: 8px;
+      }
+      .btn-ic {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+      }
+      .btn-ic.edit {
+        background-color: var(--bg-color);
+        border-color: var(--border-color);
+        color: var(--text-main);
+      }
+      .btn-ic.edit:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .btn-ic.del {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: var(--red);
+      }
+      .btn-ic.del:hover {
+        background-color: var(--red);
+        color: white;
+      }
+
+      /* Profile Action Buttons wrapper */
+      .p-acts {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+    </style>
   </head>
   <body>
     <nav class="nav">
@@ -42,10 +159,14 @@
             Register
           </button>
         </div>
-        <div id="userChip" class="uchip" style="display: none">
+        <div
+          id="userChip"
+          class="uchip"
+          style="display: none"
+          onclick="openProfileModal()"
+        >
           <div class="uav" id="uAv">?</div>
           <span class="unm" id="uNm"></span>
-          <button class="btn-out" onclick="logout()">Sign out</button>
         </div>
       </div>
     </nav>
@@ -169,7 +290,7 @@
               openAuthModal('register');
             "
           >
-            Create Account &mdash; It&apos;s Free
+            Create Account
           </button>
         </div>
       </div>
@@ -180,7 +301,8 @@
         <button class="mx" onclick="closeModal('authOv')">&#x2715;</button>
         <div class="mlogo">Chai<span>Code</span> Cinema</div>
         <div class="msub" id="authSub">Your next movie experience awaits.</div>
-        <div class="tabs">
+
+        <div class="tabs" id="authTabs">
           <button class="tab active" id="tLogin" onclick="switchTab('login')">
             Sign In
           </button>
@@ -188,6 +310,7 @@
             Register
           </button>
         </div>
+
         <form id="loginForm" onsubmit="doLogin(event)" novalidate>
           <div class="fg">
             <label class="fl" for="lEmail">Email</label>
@@ -230,9 +353,12 @@
               Password must be at least 6 characters.
             </div>
           </div>
-          <div class="ferr" id="lGenErr" style="margin-bottom: 6px"></div>
+          <div class="f-pw">
+            <a href="#" onclick="switchTab('forgot')">Forgot password?</a>
+          </div>
           <button type="submit" class="btn-sub" id="lBtn">Sign In</button>
         </form>
+
         <form
           id="regForm"
           style="display: none"
@@ -319,13 +445,108 @@
                 </svg>
               </button>
             </div>
-            <div class="ferr" id="rCfErr">Passwords don&apos;t match.</div>
+            <div class="ferr" id="rCfErr">Passwords don't match.</div>
           </div>
-          <div class="ferr" id="rGenErr" style="margin-bottom: 6px"></div>
           <button type="submit" class="btn-sub" id="rBtn">
             Create Account
           </button>
         </form>
+
+        <form
+          id="forgotForm"
+          style="display: none"
+          onsubmit="doForgot(event)"
+          novalidate
+        >
+          <div class="fg">
+            <label class="fl" for="fEmail">Email Address</label>
+            <input
+              class="fi"
+              type="email"
+              id="fEmail"
+              placeholder="Enter email to reset password"
+            />
+            <div class="ferr" id="fEmailErr">Enter a valid email address.</div>
+          </div>
+          <button type="submit" class="btn-sub" id="fBtn">
+            Send Reset Link
+          </button>
+          <button
+            type="button"
+            class="btn-gf"
+            style="margin-top: 12px"
+            onclick="switchTab('login')"
+          >
+            &larr; Back to Sign In
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="ov" id="profileOv">
+      <div class="modal" style="max-width: 380px; text-align: center">
+        <button class="mx" onclick="closeModal('profileOv')">&#x2715;</button>
+        <div
+          class="uav"
+          id="pAv"
+          style="
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+            margin: 0 auto 16px;
+          "
+        >
+          ?
+        </div>
+        <div class="ptitle" id="pName" style="margin-bottom: 4px">Name</div>
+        <div class="pdesc" id="pEmail" style="margin-bottom: 16px">
+          email@example.com
+        </div>
+
+        <div class="p-acts">
+          <button class="btn-ic edit" onclick="userChangePw()">
+            Change Password
+          </button>
+          <button class="btn-ic del" onclick="userDeleteAccount()">
+            Delete Account
+          </button>
+        </div>
+
+        <div class="pbtns">
+          <button
+            class="btn-sub"
+            id="adminPanelBtn"
+            style="
+              display: none;
+              background: var(--accent);
+              box-shadow: 0 4px 15px var(--accent-glow);
+            "
+            onclick="openAdminModal()"
+          >
+            Open Admin Dashboard
+          </button>
+          <button
+            class="btn-gf"
+            onclick="
+              logout();
+              closeModal('profileOv');
+            "
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ov" id="adminOv">
+      <div class="modal" style="max-width: 600px">
+        <button class="mx" onclick="closeModal('adminOv')">&#x2715;</button>
+        <div class="ptitle" style="margin-bottom: 8px">Admin Dashboard</div>
+        <div class="pdesc" style="margin-bottom: 24px">
+          Manage registered accounts and system access.
+        </div>
+
+        <div class="admin-list" id="adminUserList"></div>
       </div>
     </div>
 
@@ -335,9 +556,21 @@
     </div>
 
     <script>
+      let dbUsers = [
+        { id: 1, name: "System Admin", email: "admin@chai.com", role: "admin" },
+        {
+          id: 2,
+          name: "Hitesh Choudhary",
+          email: "hitesh@chai.com",
+          role: "user",
+        },
+        { id: 3, name: "Piyush Garg", email: "piyush@chai.com", role: "user" },
+      ];
+
       let currentUser = null,
         seats = [],
         selected = new Set();
+
       const PRICE_STD = 220,
         PRICE_PREM = 380,
         PREMIUM = ["A", "B"],
@@ -487,9 +720,13 @@
       function doLogin(e) {
         e.preventDefault();
         clearErrs("l");
-        const email = document.getElementById("lEmail").value.trim(),
-          pw = document.getElementById("lPw").value;
+        const email = document
+          .getElementById("lEmail")
+          .value.trim()
+          .toLowerCase();
+        const pw = document.getElementById("lPw").value;
         let ok = true;
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           showErr("lEmailErr");
           ok = false;
@@ -499,19 +736,28 @@
           ok = false;
         }
         if (!ok) return;
+
         const btn = document.getElementById("lBtn");
         btn.innerHTML = '<span class="spin"></span>';
         btn.disabled = true;
+
         setTimeout(() => {
           btn.innerHTML = "Sign In";
           btn.disabled = false;
-          const name = email
-            .split("@")[0]
-            .replace(/[._]/g, " ")
-            .replace(/\b\w/g, (c) => c.toUpperCase());
-          loginUser({ name, email });
+
+          let userObj = dbUsers.find((u) => u.email === email);
+          if (!userObj) {
+            const name = email
+              .split("@")[0]
+              .replace(/[._]/g, " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase());
+            userObj = { id: Date.now(), name, email, role: "user" };
+            dbUsers.push(userObj);
+          }
+
+          loginUser(userObj);
           closeModal("authOv");
-          showToast("success", `Welcome back, ${name.split(" ")[0]}!`);
+          showToast("success", `Welcome back, ${userObj.name.split(" ")[0]}!`);
         }, 750);
       }
 
@@ -519,10 +765,11 @@
         e.preventDefault();
         clearErrs("r");
         const name = document.getElementById("rName").value.trim(),
-          email = document.getElementById("rEmail").value.trim(),
+          email = document.getElementById("rEmail").value.trim().toLowerCase(),
           pw = document.getElementById("rPw").value,
           cf = document.getElementById("rCf").value;
         let ok = true;
+
         if (name.length < 2) {
           showErr("rNameErr");
           ok = false;
@@ -540,13 +787,19 @@
           ok = false;
         }
         if (!ok) return;
+
         const btn = document.getElementById("rBtn");
         btn.innerHTML = '<span class="spin"></span>';
         btn.disabled = true;
+
         setTimeout(() => {
           btn.innerHTML = "Create Account";
           btn.disabled = false;
-          loginUser({ name, email });
+
+          const newUser = { id: Date.now(), name, email, role: "user" };
+          dbUsers.push(newUser);
+
+          loginUser(newUser);
           closeModal("authOv");
           showToast(
             "success",
@@ -555,17 +808,41 @@
         }, 850);
       }
 
+      function doForgot(e) {
+        e.preventDefault();
+        clearErrs("f");
+        const email = document.getElementById("fEmail").value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showErr("fEmailErr");
+          return;
+        }
+
+        const btn = document.getElementById("fBtn");
+        btn.innerHTML = '<span class="spin"></span>';
+        btn.disabled = true;
+
+        setTimeout(() => {
+          btn.innerHTML = "Send Reset Link";
+          btn.disabled = false;
+          closeModal("authOv");
+          showToast("info", `Reset link sent to ${email}`);
+        }, 800);
+      }
+
       function loginUser(u) {
         currentUser = u;
         document.getElementById("authBtns").style.display = "none";
         document.getElementById("userChip").style.display = "flex";
-        document.getElementById("uNm").textContent = u.name.split(" ")[0];
-        document.getElementById("uAv").textContent = u.name
+
+        const initials = u.name
           .split(" ")
           .map((w) => w[0])
           .join("")
           .slice(0, 2)
           .toUpperCase();
+        document.getElementById("uNm").textContent = u.name.split(" ")[0];
+        document.getElementById("uAv").textContent = initials;
+
         renderGrid();
       }
 
@@ -574,6 +851,8 @@
         selected.clear();
         document.getElementById("authBtns").style.display = "flex";
         document.getElementById("userChip").style.display = "none";
+        document.getElementById("lEmail").value = "";
+        document.getElementById("lPw").value = "";
         updateBar();
         renderGrid();
         showToast("info", "Signed out successfully.");
@@ -586,6 +865,126 @@
         btn.innerHTML = hide
           ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
           : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+      }
+
+      // ---- NEW: User Profile Actions ----
+      function userChangePw() {
+        if (!currentUser) return;
+        const newPw = prompt("Enter your new password (minimum 6 characters):");
+
+        if (newPw && newPw.length >= 6) {
+          // In a real app, this would be an API call to update the DB
+          showToast("success", "Your password has been updated.");
+        } else if (newPw) {
+          alert("Password must be at least 6 characters long.");
+        }
+      }
+
+      function userDeleteAccount() {
+        if (!currentUser) return;
+
+        const confirmDelete = confirm(
+          "Are you sure you want to delete your account? This action cannot be undone.",
+        );
+
+        if (confirmDelete) {
+          // Remove user from the mock array
+          dbUsers = dbUsers.filter((u) => u.id !== currentUser.id);
+
+          // Release any seats they had booked in the mock grid
+          seats.forEach((s) => {
+            if (s.bookedBy === currentUser.name) {
+              s.bookedBy = null;
+            }
+          });
+
+          closeModal("profileOv");
+          logout(); // Signs them out and re-renders the grid
+          showToast("error", "Your account has been deleted.");
+        }
+      }
+
+      // ---- Profile & Admin Logic ----
+      function openProfileModal() {
+        if (!currentUser) return;
+
+        const initials = currentUser.name
+          .split(" ")
+          .map((w) => w[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase();
+        document.getElementById("pAv").textContent = initials;
+        document.getElementById("pName").textContent = currentUser.name;
+        document.getElementById("pEmail").textContent = currentUser.email;
+
+        const adminBtn = document.getElementById("adminPanelBtn");
+        if (currentUser.role === "admin") {
+          adminBtn.style.display = "block";
+        } else {
+          adminBtn.style.display = "none";
+        }
+
+        openModal("profileOv");
+      }
+
+      function openAdminModal() {
+        closeModal("profileOv");
+        renderAdminList();
+        openModal("adminOv");
+      }
+
+      function renderAdminList() {
+        const listDiv = document.getElementById("adminUserList");
+        listDiv.innerHTML = "";
+
+        dbUsers.forEach((user) => {
+          const badgeHTML =
+            user.role === "admin" ? `<span class="u-badge">Admin</span>` : "";
+          const isMe = user.email === currentUser.email;
+
+          const row = document.createElement("div");
+          row.className = "u-row";
+          row.innerHTML = `
+                <div class="u-info">
+                    <div class="u-name">${user.name} ${badgeHTML}</div>
+                    <div class="u-email">${user.email}</div>
+                </div>
+                <div class="u-acts">
+                    <button class="btn-ic edit" onclick="adminChangePw(${user.id})" title="Change Password">P/W</button>
+                    ${!isMe ? `<button class="btn-ic del" onclick="adminDeleteUser(${user.id})" title="Delete User">Delete</button>` : ""}
+                </div>
+            `;
+          listDiv.appendChild(row);
+        });
+      }
+
+      function adminDeleteUser(userId) {
+        if (confirm("Are you sure you want to delete this user?")) {
+          dbUsers = dbUsers.filter((u) => u.id !== userId);
+
+          // Release seats booked by the deleted user
+          const deletedUser = dbUsers.find((u) => u.id === userId);
+          if (deletedUser) {
+            seats.forEach((s) => {
+              if (s.bookedBy === deletedUser.name) s.bookedBy = null;
+            });
+            renderGrid();
+          }
+
+          renderAdminList();
+          showToast("success", "User deleted.");
+        }
+      }
+
+      function adminChangePw(userId) {
+        const user = dbUsers.find((u) => u.id === userId);
+        const newPw = prompt(`Enter a new password for ${user.email}:`);
+        if (newPw && newPw.length >= 6) {
+          showToast("success", "Password updated for user.");
+        } else if (newPw) {
+          alert("Password must be at least 6 characters.");
+        }
       }
 
       function openModal(id) {
@@ -604,16 +1003,38 @@
       }
 
       function switchTab(tab) {
-        const lg = tab === "login";
-        document.getElementById("loginForm").style.display = lg ? "" : "none";
-        document.getElementById("regForm").style.display = lg ? "none" : "";
-        document.getElementById("tLogin").classList.toggle("active", lg);
-        document.getElementById("tReg").classList.toggle("active", !lg);
-        document.getElementById("authSub").textContent = lg
-          ? "Your next movie experience awaits."
-          : "Join free \u2014 no spam, we promise.";
+        const isLog = tab === "login";
+        const isReg = tab === "register";
+        const isForg = tab === "forgot";
+
+        document.getElementById("loginForm").style.display = isLog
+          ? ""
+          : "none";
+        document.getElementById("regForm").style.display = isReg ? "" : "none";
+        document.getElementById("forgotForm").style.display = isForg
+          ? ""
+          : "none";
+
+        document.getElementById("authTabs").style.display = isForg
+          ? "none"
+          : "flex";
+
+        document.getElementById("tLogin").classList.toggle("active", isLog);
+        document.getElementById("tReg").classList.toggle("active", isReg);
+
+        if (isLog)
+          document.getElementById("authSub").textContent =
+            "Your next movie experience awaits.";
+        else if (isReg)
+          document.getElementById("authSub").textContent =
+            "Join free \u2014 no spam, we promise.";
+        else if (isForg)
+          document.getElementById("authSub").textContent =
+            "Don't worry, we'll help you get back in.";
+
         clearErrs("l");
         clearErrs("r");
+        clearErrs("f");
       }
 
       function showErr(id) {
@@ -673,6 +1094,5 @@
 
       fetchSeats();
     </script>
-    <script src="./js/script.js"></script>
   </body>
 </html>

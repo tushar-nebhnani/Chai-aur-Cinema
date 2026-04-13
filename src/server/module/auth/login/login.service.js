@@ -10,7 +10,7 @@ const loginService = async (email, password, device = "Unknown device") => {
     const user = result.rows[0];
 
     if (!user) {
-      throw APIError.notAuthorised("Invalid email or password.");
+      throw APIError.notAuthorised("Invalid email or password. User not found");
     }
 
     const isPasswordValid = await PasswordUtils.compare(

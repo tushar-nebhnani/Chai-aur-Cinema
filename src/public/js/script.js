@@ -39,16 +39,16 @@ async function doLogin(event) {
       return;
     }
 
-    // const user = data.data?.user || { name: email.split("@")[0], email };
-    // loginUser({
-    //   name: user.name || email.split("@")[0],
-    //   email: user.email || email,
-    // });
-    // closeModal("authOv");
-    // showToast(
-    //   "success",
-    //   `Welcome back, ${user.name?.split(" ")[0] || "Guest"}!`,
-    // );
+    const user = data.data?.user || { name: email.split("@")[0], email };
+    loginUser({
+      name: user.name || email.split("@")[0],
+      email: user.email || email,
+    });
+    closeModal("authOv");
+    showToast(
+      "success",
+      `Welcome back, ${user.name?.split(" ")[0] || "Guest"}!`,
+    );
   } catch (error) {
     console.error("Login API error:", error);
     showToast("error", "Unable to reach the server. Try again later.");

@@ -1,6 +1,6 @@
 import APIError from "../../../common/utils/api.error.js";
 
-const checkEmptyParams = (req, res, next) => {
+const checkEmptyParamsLogin = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
     throw APIError.badRequest("Please enter your mail address or password");
@@ -9,4 +9,4 @@ const checkEmptyParams = (req, res, next) => {
   next();
 };
 
-export default checkEmptyParams;
+export default checkEmptyParamsLogin;

@@ -16,12 +16,17 @@ import {
 // login-service
 import LoginDTO from "./module/auth/login/login.dto.js";
 import loginController from "./module/auth/login/login.controller.js";
-import checkEmptyParams from "./module/auth/login/login.middleware.js";
+import checkEmptyParamsLogin from "./module/auth/login/login.middleware.js";
+
+// change-password service
+import { changePasswordController } from "./module/auth/password/password.controller.js";
+import ChangePassDTO from "./module/auth/password/change-password/changePass.dto.js";
+import checkEmptyParamsChangePass from "./module/auth/password/change-password/changePass.middleware.js";
 
 // register-service
 router.post(
   "/register",
-  // authLimiter,
+  authLimiter,
   validate(RegisterDTO),
   checkExistingEmail,
   checkExistingUsername,
@@ -31,10 +36,19 @@ router.post(
 // login-service
 router.post(
   "/login",
-  // authLimiter,
+  authLimiter,
   validate(LoginDTO),
-  checkEmptyParams,
+  checkEmptyParamsLogin,
   loginController,
+);
+
+// forgot-password
+router.post(
+  "/change-password",
+  authLimiter,
+  validate(ChangePassDTO),
+  checkEmptyParamsChangePass,
+  changePasswordController,
 );
 
 export default router;

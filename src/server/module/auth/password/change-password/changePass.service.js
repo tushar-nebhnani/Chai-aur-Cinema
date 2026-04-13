@@ -3,7 +3,7 @@ import PasswordUtils from "../../../../common/utils/password.utils.js";
 import APIErrors from "../../../../common/utils/api.error.js";
 import sendChangePasswordMail from "../../../../common/mail-service/email.service.js";
 
-const changePassService = async (email, oldPassword, newPassword) => {
+const changePassService = async (userId, oldPassword, newPassword) => {
   try {
     const userData = await pool.query(`SELECT * FROM users WHERE user_id=$1`, [
       userId,

@@ -1,160 +1,114 @@
-// --- VIEW CONTROLLER ---
-function showView(viewId) {
-  document
-    .querySelectorAll(".view")
-    .forEach((view) => view.classList.add("hidden"));
-  document.getElementById(viewId).classList.remove("hidden");
+const API_BASE_URL = "http://localhost:4000/bookmyshow";
 
-  const navTools = document.getElementById("nav-user-tools");
-  if (viewId === "profileView" || viewId === "seatView") {
-    navTools.classList.remove("hidden");
-  } else {
-    navTools.classList.add("hidden");
+async function doLogin(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("lEmail")?.value.trim();
+  const password = document.getElementById("lPw")?.value;
+  const btn = document.getElementById("lBtn");
+  const originalText = btn?.textContent;
+
+  if (!email || !password) {
+    showToast("error", "Please enter both email and password.");
+    return;
   }
-  // Scroll to top on view change
-  window.scrollTo(0, 0);
-}
 
-// --- SEAT GRID LOGIC ---
-const grid = document.getElementById("seatingGrid");
-const selectedInput = document.getElementById("selectedSeatsInput");
-const seatCountDisplay = document.getElementById("seatCount");
-let selectedSeats = [];
-
-// Generate 48 seats for preview
-for (let i = 1; i <= 48; i++) {
-  const seat = document.createElement("div");
-  seat.classList.add("seat");
-
-  // Mocking some booked seats
-  if ([5, 6, 14, 22, 23, 38].includes(i)) {
-    seat.classList.add("booked");
-  } else {
-    seat.addEventListener("click", () => {
-      seat.classList.toggle("selected");
-      const isSelected = seat.classList.contains("selected");
-
-      if (isSelected) {
-        selectedSeats.push(i);
-      } else {
-        selectedSeats = selectedSeats.filter((id) => id !== i);
-      }
-
-      // Update hidden input for backend & UI text
-      selectedInput.value = selectedSeats.join(",");
-      seatCountDisplay.innerText = `${selectedSeats.length} Seats Selected`;
-    });
+  if (btn) {
+    btn.textContent = "Signing in...";
+    btn.disabled = true;
   }
-  grid.appendChild(seat);
-}
-
-// --- FORM HANDLING & MODAL ---
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-const bookingForm = document.getElementById("bookingForm");
-const successModal = document.getElementById("successModal");
-
-const API_BASE_URL = "http://localhost:4000";
-
-// Simple transition from Auth to Profile for preview
-loginForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const submitBtn = loginForm.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = "Signing in...";
-  submitBtn.disabled = true;
-
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
 
   try {
-    const response = await fetch(`${API_BASE_URL}/bookmyshow/login`, {
+    const response = await fetch(`${API_BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await response.json();
 
-    if (response.ok) {
-      document.getElementById("profileView").querySelector("h2").innerText =
-        `Welcome, ${data.data.email}`;
-      showView("profileView");
-    } else {
-      alert(data.message || "Login failed. Check your credentials.");
+    if (!response.ok) {
+      showToast(
+        "error",
+        data.message ||
+          data.error ||
+          "Login failed. Please check your credentials.",
+      );
+      return;
     }
+
+    // const user = data.data?.user || { name: email.split("@")[0], email };
+    // loginUser({
+    //   name: user.name || email.split("@")[0],
+    //   email: user.email || email,
+    // });
+    // closeModal("authOv");
+    // showToast(
+    //   "success",
+    //   `Welcome back, ${user.name?.split(" ")[0] || "Guest"}!`,
+    // );
   } catch (error) {
-    console.error("Login fetch error:", error);
-    alert("Unable to reach server. Try again later.");
-  } finally {
-    submitBtn.innerText = originalText;
-    submitBtn.disabled = false;
+    console.error("Login API error:", error);
+    showToast("error", "Unable to reach the server. Try again later.");
   }
-});
+}
 
-registerForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+async function doRegister(event) {
+  event.preventDefault();
 
-  const submitBtn = registerForm.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = "registering...";
-  submitBtn.disabled = true;
+  const username = document.getElementById("rName")?.value.trim();
+  const email = document.getElementById("rEmail")?.value.trim();
+  const password = document.getElementById("rPw")?.value;
+  const confirm = document.getElementById("rCf")?.value;
+  const btn = document.getElementById("rBtn");
+  const originalText = btn?.textContent;
 
-  const fullname = document.getElementById("regName").value;
-  const email = document.getElementById("regEmail").value;
-  const password = document.getElementById("regPass").value;
+  if (!username || !email || !password || !confirm) {
+    showToast("error", "Please fill in all registration fields.");
+    return;
+  }
+
+  if (password !== confirm) {
+    showToast("error", "Passwords do not match.");
+    return;
+  }
+
+  if (btn) {
+    btn.textContent = "Creating...";
+    btn.disabled = true;
+  }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/bookmyshow/register`, {
+    const response = await fetch(`${API_BASE_URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username: fullname,
-        email: email,
-        password: password,
-      }),
+      body: JSON.stringify({ username, email, password }),
     });
 
-    if (response.ok) {
-      alert("Registration successful! Please sign in.");
-      registerForm.reset();
-      showView("loginView");
-    } else {
-      alert(data.error || "Registration failed. Please try again.");
+    const data = await response.json();
+
+    if (!response.ok) {
+      showToast(
+        "error",
+        data.message || data.error || "Registration failed. Please try again.",
+      );
+      return;
     }
+
+    showToast("success", "Registration successful! Please sign in.");
+    document.getElementById("regForm")?.reset();
+    switchTab("login");
   } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Cannot connect to the server right now.");
+    console.error("Register API error:", error);
+    showToast("error", "Unable to reach the server. Try again later.");
   } finally {
-    submitBtn.innerText = originalText;
-    submitBtn.disabled = false;
+    if (btn) {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
   }
-});
-
-// Handle the "Pay" and Success Modal
-bookingForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  if (selectedSeats.length === 0) {
-    alert("Please select at least one seat first!");
-    return;
-  }
-  // Trigger white success modal
-  successModal.classList.add("active");
-});
-
-function closeModal() {
-  successModal.classList.remove("active");
-  // Reset and go back
-  selectedSeats = [];
-  document
-    .querySelectorAll(".seat.selected")
-    .forEach((s) => s.classList.remove("selected"));
-  selectedInput.value = "";
-  seatCountDisplay.innerText = "0 Seats Selected";
-  showView("profileView");
 }

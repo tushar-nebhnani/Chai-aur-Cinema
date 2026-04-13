@@ -21,7 +21,7 @@ import checkEmptyParams from "./module/auth/login/login.middleware.js";
 // register-service
 router.post(
   "/register",
-  authLimiter,
+  // authLimiter,
   validate(RegisterDTO),
   checkExistingEmail,
   checkExistingUsername,
@@ -31,7 +31,7 @@ router.post(
 // login-service
 router.post(
   "/login",
-  authLimiter,
+  // authLimiter,
   validate(LoginDTO),
   checkEmptyParams,
   loginController,

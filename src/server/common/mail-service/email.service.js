@@ -40,6 +40,17 @@ export const sendPasswordResetMail = async (toEmail, rawToken) => {
   });
 };
 
+export const sendChangePasswordMail = async (toEmail, name) => {
+  const baseUrl = process.env.FRONTEND_URL || "http://localhost:4000";
+  const resetUrl = `${baseUrl}/api/auth/change-password?token=${rawToken}`;
+
+  return await sendMail({
+    to: toEmail,
+    subject: "Password Changed Successfully.",
+    html: templates.passwordReset(resetUrl),
+  });
+};
+
 export const sendVerificationMail = async (toEmail, rawToken) => {
   const baseUrl = process.env.FRONTEND_URL || "http://localhost:4000";
   const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${rawToken}`;

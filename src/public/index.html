@@ -761,53 +761,6 @@
         }, 750);
       }
 
-      function doRegister(e) {
-        e.preventDefault();
-        clearErrs("r");
-        const name = document.getElementById("rName").value.trim(),
-          email = document.getElementById("rEmail").value.trim().toLowerCase(),
-          pw = document.getElementById("rPw").value,
-          cf = document.getElementById("rCf").value;
-        let ok = true;
-
-        if (name.length < 2) {
-          showErr("rNameErr");
-          ok = false;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          showErr("rEmailErr");
-          ok = false;
-        }
-        if (pw.length < 6) {
-          showErr("rPwErr");
-          ok = false;
-        }
-        if (pw !== cf) {
-          showErr("rCfErr");
-          ok = false;
-        }
-        if (!ok) return;
-
-        const btn = document.getElementById("rBtn");
-        btn.innerHTML = '<span class="spin"></span>';
-        btn.disabled = true;
-
-        setTimeout(() => {
-          btn.innerHTML = "Create Account";
-          btn.disabled = false;
-
-          const newUser = { id: Date.now(), name, email, role: "user" };
-          dbUsers.push(newUser);
-
-          loginUser(newUser);
-          closeModal("authOv");
-          showToast(
-            "success",
-            `Welcome, ${name.split(" ")[0]}! Enjoy the show.`,
-          );
-        }, 850);
-      }
-
       function doForgot(e) {
         e.preventDefault();
         clearErrs("f");

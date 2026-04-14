@@ -3,6 +3,10 @@ class APIError extends Error {
     super(message);
     this.statusCode = statusCode;
     Error.captureStackTrace(this, this.constructor);
+
+    console.error(`[APIError] status=${statusCode} message="${message}"`, {
+      stack: this.stack,
+    });
   }
   static badRequest(message = "Required data not found") {
     return new APIError(404, message);

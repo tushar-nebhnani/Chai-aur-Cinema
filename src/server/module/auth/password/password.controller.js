@@ -8,26 +8,29 @@ import changePassService from "./change-password/changePass.service.js";
 // reset-password service
 import resetPassService from "./reset-password/resetPass.service.js";
 
-const changePasswordController = async (req, res) => {
+const changePasswordController = async (req, res, next) => {
   try {
     const { oldPassword, newPassword } = req.body;
     const userId = req.user.id;
 
-    const user = await changePassService(userId, oldPassword, newPassword);
+    const result = await changePassService(userId, oldPassword, newPassword);
 
-    if (!user) {
-      throw APIError.badRequest();
+    if (!result) {
+      throw APIError.badRequest("Password change failed.");
     }
 
-    APIResponse.success(res, "Password changed succesfully");
+    return APIResponse.success(res, "Password changed succesfully");
   } catch (error) {
-    console.error("Error while changing the password from controller.", error);
+    console.error(
+      "[PasswordController] Error while changing the password:",
+      error,
+    );
+    return next(error);
   }
 };
 
-const resetPasswordController = async (req, res) => {
+const resetPasswordController = async (req, res, next) => {
   try {
-    console.log("🔍 WHAT IS IN THE URL?", req.query);
     const { newPassword } = req.body;
     const token = req.query.token;
 
@@ -43,9 +46,13 @@ const resetPasswordController = async (req, res) => {
       sameSite: "strict",
     });
 
-    APIResponse.success(res, "Password changed succesfully", result);
+    return APIResponse.success(res, "Password changed succesfully", result);
   } catch (error) {
-    console.error("error while resetting the password from controller.", error);
+    console.error(
+      "[PasswordController] Error while resetting the password:",
+      error,
+    );
+    return next(error);
   }
 };
 

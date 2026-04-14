@@ -1,7 +1,7 @@
 import loginService from "./login.service.js";
 import APIResponse from "../../../common/utils/api.response.js";
 
-const loginController = async (req, res) => {
+const loginController = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -16,7 +16,8 @@ const loginController = async (req, res) => {
 
     return APIResponse.success(res, "User logged in successfully", user.user);
   } catch (error) {
-    console.error("Error while logging the user.", error);
+    console.error("[LoginController] Failed to log in user:", error);
+    return next(error);
   }
 };
 

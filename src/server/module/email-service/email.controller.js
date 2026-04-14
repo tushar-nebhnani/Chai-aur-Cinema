@@ -1,5 +1,6 @@
 import verifyEmailService from "./verify-email.service.js"; // Assume you built this
 import APIError from "../../../common/utils/api.error.js";
+import APIResponse from "../../../common/utils/api.response.js";
 
 export const verifyEmailController = async (req, res, next) => {
   try {
@@ -11,8 +12,9 @@ export const verifyEmailController = async (req, res, next) => {
 
     const result = await verifyEmailService(token);
 
-    res.status(200).json(result);
+    return APIResponse.success(res, result.message, result);
   } catch (error) {
-    next(error);
+    console.error("[EmailController] Email verification failed:", error);
+    return next(error);
   }
 };

@@ -10,7 +10,7 @@ const deleteService = async (userId) => {
     );
 
     if (user.rowCount === 0) {
-      APIError.badRequest("User not found or User has already been deleted");
+      throw APIError.badRequest("User not found or User has already been deleted");
     }
 
     const deletedUser = user.rows[0];
@@ -21,11 +21,12 @@ const deleteService = async (userId) => {
     );
 
     return {
-      name: user.full_name,
-      email: user.email,
+      name: deletedUser.full_name,
+      email: deletedUser.email,
     };
   } catch (error) {
-    console.error("Error while deleting the user from the DB.");
+    console.error("[DeleteService] Error while deleting the user from the DB:", error);
+    throw error;
   }
 };
 

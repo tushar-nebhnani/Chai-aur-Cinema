@@ -42,8 +42,8 @@ router.post(
   "/register",
   authLimiter,
   validate(RegisterDTO),
-  checkExistingEmail,
-  checkExistingUsername,
+  // checkExistingEmail,
+  // checkExistingUsername,
   registerController,
 );
 

@@ -2,7 +2,7 @@ import crypto from "crypto";
 import pool from "../../../../common/db/db.config.js";
 import APIError from "../../../../common/utils/api.error.js";
 import PasswordUtils from "../../../../common/utils/password.utils.js";
-import { sendChangePasswordMail } from "../../../../common/mail-service/email.service.js";
+// import { sendChangePasswordMail } from "../../../../common/notification-service/notification.service.js";
 
 const resetPassService = async (rawToken, newPassword) => {
   const hashedToken = crypto
@@ -36,7 +36,7 @@ const resetPassService = async (rawToken, newPassword) => {
     [newHashedPassword, user.user_id],
   );
 
-  sendChangePasswordMail(user.email, user.full_name);
+  // sendChangePasswordMail(user.email, user.full_name);
 
   return true;
 };

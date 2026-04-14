@@ -1,7 +1,7 @@
 import pool from "../../../../common/db/db.config.js";
 import PasswordUtils from "../../../../common/utils/password.utils.js";
 import APIErrors from "../../../../common/utils/api.error.js";
-import { sendChangePasswordMail } from "../../../../common/mail-service/email.service.js";
+// import { sendChangePasswordMail } from "../../../../common/notification-service/notification.service.js";
 
 const changePassService = async (userId, oldPassword, newPassword) => {
   try {
@@ -28,7 +28,7 @@ const changePassService = async (userId, oldPassword, newPassword) => {
       userId,
     ]);
 
-    sendChangePasswordMail(user.email, user.full_name);
+    // sendChangePasswordMail(user.email, user.full_name);
 
     return true;
   } catch (error) {

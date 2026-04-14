@@ -1,6 +1,7 @@
 import JWTtokens from "../../../common/utils/jwt.utils.js";
 import pool from "../../../common/db/db.config.js";
 import PasswordUtils from "../../../common/utils/password.utils.js";
+import NotificationService from "../../../common/notification-service/notification.service.js";
 
 const registerService = async (username, email, password) => {
   const hashPass = await PasswordUtils.hash(password);
@@ -20,10 +21,11 @@ const registerService = async (username, email, password) => {
 
     const result = await pool.query(sql, values);
 
+    NotificationService.sendWelcome(email, username, rawToken);
+
     return {
       userId: result.rows[0].user_id,
       email: email,
-      verificationToken: rawToken,
     };
   } catch (error) {
     console.error(`Error in registering the user`, error);

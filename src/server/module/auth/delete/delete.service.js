@@ -1,6 +1,6 @@
 import APIError from "../../../common/utils/api.error.js";
 import pool from "../../../common/db/db.config.js";
-import { sendDeletetMail } from "../../../common/mail-service/email.service.js";
+// import { sendDeletetMail } from "../../../common/notification-service/notification.service.js";
 
 const deleteService = async (userId) => {
   try {
@@ -15,7 +15,7 @@ const deleteService = async (userId) => {
 
     const deletedUser = user.rows[0];
 
-    sendDeletetMail(deletedUser.email);
+    // sendDeletetMail(deletedUser.email);
 
     return {
       name: user.full_name,

@@ -1,5 +1,5 @@
 import pool from "../../../common/db/db.config.js";
-import { sendLogoutMail } from "../../../common/mail-service/email.service.js";
+// import { sendLogoutMail } from "../../../common/notification-service/notification.service.js";
 
 const logoutService = async (userId) => {
   try {
@@ -9,7 +9,7 @@ const logoutService = async (userId) => {
     );
     const user = result.rows[0];
     if (user) {
-      sendLogoutMail(user.full_name, user.email);
+      // sendLogoutMail(user.full_name, user.email);
     }
 
     return true;

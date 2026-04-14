@@ -7,27 +7,29 @@ const verifyToken = async (req, res, next) => {
     const token = req.cookies.accessToken;
 
     if (!token) {
-      throw APIError.unauthorized("Access token not found in the cookie.");
+      throw APIError.notAuthorised("Access token not found in the cookie.");
     }
 
     const decodePayLoad = jwt.verify(token, process.env.JWT_ACCESS_SECRET_KEY);
     req.user = decodePayLoad;
 
-    const result = await pool.query(
-      "SELECT is_verified FROM users WHERE user_id = $1",
-      [decodePayLoad.userId],
-    );
-    const liveUser = result.rows[0];
+    // Work on the verify email service
 
-    if (!liveUser) {
-      throw APIError.unauthorized("User no longer exists.");
-    }
+    // const result = await pool.query(
+    //   "SELECT is_verified FROM users WHERE user_id = $1",
+    //   [decodePayLoad.id],
+    // );
+    // const liveUser = result.rows[0];
 
-    if (liveUser.is_verified === false) {
-      throw APIError.forbidden(
-        "Please verify your email to access this feature.",
-      );
-    }
+    // if (!liveUser) {
+    //   throw APIError.badRequest("User no longer exists.");
+    // }
+
+    // if (liveUser.is_verified === false) {
+    //   throw APIError.notAuthorised(
+    //     "Please verify your email to access this feature.",
+    //   );
+    // }
 
     next();
   } catch (error) {
@@ -35,10 +37,10 @@ const verifyToken = async (req, res, next) => {
 
     if (error.name === "TokenExpiredError") {
       next(
-        APIError.unauthorized("Your session has expired. Please log in again."),
+        APIError.badRequest("Your session has expired. Please log in again."),
       );
     } else if (error.name === "JsonWebTokenError") {
-      next(APIError.unauthorized("Invalid authentication token."));
+      next(APIError.badRequest("Invalid authentication token."));
     } else {
       next(error); // Passes the custom APIError or DB errors to your global handler
     }

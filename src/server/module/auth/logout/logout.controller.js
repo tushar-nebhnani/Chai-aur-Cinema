@@ -4,10 +4,11 @@ import APIResponse from "../../../common/utils/api.response.js";
 
 const logoutController = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    console.log("🚨 WHAT IS REQ.USER?:", req.user);
+    const userId = req.user.id;
 
     if (!userId) {
-      throw APIError.badRequest("user_id not found.");
+      throw APIError.badRequest("user_id not found. From logout controller");
     }
 
     const result = await logoutService(userId);
@@ -18,7 +19,7 @@ const logoutController = async (req, res, next) => {
       sameSite: "strict",
     });
 
-    return APIResponse.success(res, "User logout succesfully");
+    return APIResponse.success(res, "User logout succesfully", result);
   } catch (error) {
     next(error);
   }

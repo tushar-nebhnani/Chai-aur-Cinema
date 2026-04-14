@@ -64,6 +64,17 @@ class NotificationService {
     });
   }
 
+  static async sendLogoutAlert(toEmail, name) {
+    // We generate the time exactly when the email is sent
+    const time = new Date().toISOString();
+
+    return await this.#sendMail({
+      to: toEmail,
+      subject: "New Login Detected",
+      html: EmailTemplates.logout(name, time),
+    });
+  }
+
   static async sendTicketsBooked(toEmail, movieTitle, seats, time, amount) {
     return await this.#sendMail({
       to: toEmail,

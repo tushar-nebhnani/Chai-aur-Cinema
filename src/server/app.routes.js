@@ -40,7 +40,7 @@ import deleteServiceController from "./module/auth/delete/delete.controller.js";
 // register-service
 router.post(
   "/register",
-  authLimiter,
+  // authLimiter,
   validate(RegisterDTO),
   // checkExistingEmail,
   // checkExistingUsername,
@@ -50,19 +50,24 @@ router.post(
 // login-service
 router.post(
   "/login",
-  authLimiter,
+  // authLimiter,
   validate(LoginDTO),
   checkEmptyParamsLogin,
   loginController,
 );
 
 // log-out service
-router.post("/logout", authLimiter, verifyToken, logoutController);
+router.post(
+  "/logout",
+  // authLimiter,
+  verifyToken,
+  logoutController,
+);
 
 // forgot-password
 router.put(
   "/change-password",
-  authLimiter,
+  // authLimiter,
   verifyToken,
   validate(ChangePassDTO),
   checkEmptyParamsChangePass,
@@ -72,7 +77,7 @@ router.put(
 // reset-password
 router.put(
   "/reset-password",
-  authLimiter,
+  // authLimiter,
   verifyToken,
   validate(ResetPasswordDTO),
   resetPasswordController,
@@ -81,7 +86,7 @@ router.put(
 // delete-service
 router.delete(
   "/delete-account",
-  authLimiter,
+  // authLimiter,
   verifyToken,
   deleteServiceController,
 );

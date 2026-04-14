@@ -1,15 +1,14 @@
 import pool from "../../../common/db/db.config.js";
-// import { sendLogoutMail } from "../../../common/notification-service/notification.service.js";
+import NotificationService from "../../../common/notification-service/notification.service.js";
 
 const logoutService = async (userId) => {
   try {
-    const result = await pool.query(
-      "SELECT email, full_name FROM users WHERE user_id = $1",
-      [userId],
-    );
+    const result = await pool.query("SELECT * FROM users WHERE user_id = $1", [
+      userId,
+    ]);
     const user = result.rows[0];
     if (user) {
-      // sendLogoutMail(user.full_name, user.email);
+      NotificationService.sendLogoutAlert(user.email, user.full_name);
     }
 
     return true;

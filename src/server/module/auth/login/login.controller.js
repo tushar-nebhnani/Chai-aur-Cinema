@@ -5,16 +5,16 @@ const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await loginService(email, password);
+    const { token, user } = await loginService(email, password);
 
-    res.cookie("accessToken", user.token, {
+    res.cookie("accessToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return APIResponse.success(res, "User logged in successfully", user);
+    return APIResponse.success(res, "User logged in successfully", user.user);
   } catch (error) {
     console.error("Error while logging the user.", error);
   }

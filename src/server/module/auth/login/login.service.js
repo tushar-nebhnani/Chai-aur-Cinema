@@ -29,11 +29,12 @@ const loginService = async (email, password, device = "Unknown device") => {
       email: user.email,
     };
 
-    const token = JWTtokens.generateRefreshToken(payload);
+    const token = JWTtokens.generateAccessToken(payload);
 
     NotificationService.sendLoginAlert(user.email, user.full_name);
 
     return {
+      token,
       user: {
         id: user.user_id,
         name: user.full_name,

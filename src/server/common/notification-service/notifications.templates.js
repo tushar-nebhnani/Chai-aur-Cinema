@@ -188,6 +188,17 @@ class EmailTemplates {
       "Your account has been successfully deleted.",
     );
   }
+
+  static logout(name) {
+    return this.#baseTemplate(
+      "Successful Logout",
+      `<p>Hi <strong>${name}</strong>,</p>
+       <p>You have successfully logged out of your BookMyShow Clone account on this device.</p>
+       <p>If you just finished booking tickets, we hope you enjoy the show! You can always log back in whenever you are ready to browse more movies.</p>
+       <p style="font-size: 13px; color: #94a3b8; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 15px;">If you did not perform this logout and suspect someone else might be using your account, please log back in and change your password immediately.</p>`,
+      "You have been successfully logged out of your account.",
+    );
+  }
 }
 
 export default EmailTemplates;

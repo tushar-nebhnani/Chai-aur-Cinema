@@ -5,7 +5,7 @@ class NotificationService {
   static async #sendMail({ to, subject, html }) {
     try {
       const mailOptions = {
-        from: '"BookMyShow Clone" <noreply@bookmyshowclone.com>',
+        from: '"ChaiaurCinema" <noreply@bookmyshowclone.com>',
         to: to,
         subject: subject,
         html: html,

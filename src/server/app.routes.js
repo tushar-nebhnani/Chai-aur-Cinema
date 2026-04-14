@@ -2,6 +2,7 @@ import { Router } from "express";
 // utilities
 import authLimiter from "./common/middleware/api.limiter.js";
 import validate from "./common/middleware/validate.middleware.js";
+import verifyToken from "./module/auth/auth.middleware.js";
 
 const router = Router();
 
@@ -23,6 +24,9 @@ import { changePasswordController } from "./module/auth/password/password.contro
 import ChangePassDTO from "./module/auth/password/change-password/changePass.dto.js";
 import checkEmptyParamsChangePass from "./module/auth/password/change-password/changePass.middleware.js";
 
+// delete - service
+import deleteServiceController from "./module/auth/delete/delete.controller.js";
+
 // register-service
 router.post(
   "/register",
@@ -43,12 +47,21 @@ router.post(
 );
 
 // forgot-password
-router.post(
+router.put(
   "/change-password",
   authLimiter,
+  verifyToken,
   validate(ChangePassDTO),
   checkEmptyParamsChangePass,
   changePasswordController,
+);
+
+// delete-service
+router.delete(
+  "/delete-account",
+  authLimiter,
+  verifyToken,
+  deleteServiceController,
 );
 
 export default router;

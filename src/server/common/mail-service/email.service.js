@@ -79,3 +79,11 @@ export const sendLogoutMail = async (toEmail) => {
     html: templates.logoutAlert(),
   });
 };
+
+export const sendDeletetMail = async (toEmail) => {
+  return await sendMail({
+    to: toEmail,
+    subject: "Successful deleted.",
+    html: templates.logoutAlert(),
+  });
+};

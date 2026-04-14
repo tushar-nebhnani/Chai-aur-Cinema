@@ -4,7 +4,6 @@ import APIError from "../../common/utils/api.error.js";
 
 const verifyToken = async (req, res, next) => {
   try {
-    // 1. Ensure this matches what you set in res.cookie() during login!
     const token = req.cookies.accessToken;
 
     if (!token) {
@@ -16,7 +15,7 @@ const verifyToken = async (req, res, next) => {
 
     const result = await pool.query(
       "SELECT is_verified FROM users WHERE user_id = $1",
-      [decodePayLoad.userId], // Make sure your JWT payload uses 'userId'
+      [decodePayLoad.userId],
     );
     const liveUser = result.rows[0];
 
@@ -34,7 +33,6 @@ const verifyToken = async (req, res, next) => {
   } catch (error) {
     console.error("JWT Verification Error:", error.message);
 
-    // 3. Specific Error Handling
     if (error.name === "TokenExpiredError") {
       next(
         APIError.unauthorized("Your session has expired. Please log in again."),

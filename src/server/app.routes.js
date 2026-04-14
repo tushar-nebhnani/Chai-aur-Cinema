@@ -78,7 +78,6 @@ router.put(
 router.put(
   "/reset-password",
   // authLimiter,
-  verifyToken,
   validate(ResetPasswordDTO),
   resetPasswordController,
 );

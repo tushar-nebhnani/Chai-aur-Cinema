@@ -32,7 +32,11 @@ const changePassService = async (userId, oldPassword, newPassword) => {
 
     return true;
   } catch (error) {
-    console.error("Error while chnaging password.");
+    console.error(
+      "Error while chnaging password from change passord service.",
+      error,
+    );
+    process.exit(1);
   }
 };
 

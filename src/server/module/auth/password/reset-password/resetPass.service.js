@@ -2,7 +2,7 @@ import crypto from "crypto";
 import pool from "../../../../common/db/db.config.js";
 import APIError from "../../../../common/utils/api.error.js";
 import PasswordUtils from "../../../../common/utils/password.utils.js";
-// import { sendChangePasswordMail } from "../../../../common/notification-service/notification.service.js";
+import NotificationService from "../../../../common/notification-service/notification.service.js";
 
 const resetPassService = async (rawToken, newPassword) => {
   const hashedToken = crypto
@@ -20,7 +20,7 @@ const resetPassService = async (rawToken, newPassword) => {
   const user = userResult.rows[0];
 
   if (!user) {
-    throw APIError.unauthorized(
+    throw APIError.notAuthorised(
       "Token is invalid or has expired. Please request a new password reset.",
     );
   }
@@ -36,7 +36,7 @@ const resetPassService = async (rawToken, newPassword) => {
     [newHashedPassword, user.user_id],
   );
 
-  // sendChangePasswordMail(user.email, user.full_name);
+  NotificationService.sendPasswordReset(user.email, user.full_name);
 
   return true;
 };

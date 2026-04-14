@@ -7,6 +7,8 @@ import verifyToken from "./module/auth/auth.middleware.js";
 
 const router = Router();
 
+// AUTHENTICATION SERVICE
+
 // register-service
 import registerController from "./module/auth/register/register.controller.js";
 import RegisterDTO from "./module/auth/register/register.dto.js";
@@ -36,6 +38,10 @@ import ResetPasswordDTO from "./module/auth/password/reset-password/resetPass.dt
 
 // delete - service
 import deleteServiceController from "./module/auth/delete/delete.controller.js";
+
+// BUSINESS LOGIC
+import bookingServiceController from "./module/buisness-logic/booking/booking.controller.js";
+import BookingServiceDTO from "./module/buisness-logic/booking/booking.dto.js";
 
 // register-service
 router.post(
@@ -88,6 +94,15 @@ router.delete(
   // authLimiter,
   verifyToken,
   deleteServiceController,
+);
+
+// booking-seats service
+router.post(
+  "/book-seats",
+  authLimiter,
+  verifyToken,
+  validate(BookingServiceDTO),
+  bookingServiceController,
 );
 
 export default router;

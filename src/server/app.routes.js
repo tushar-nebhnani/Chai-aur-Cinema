@@ -20,6 +20,9 @@ import LoginDTO from "./module/auth/login/login.dto.js";
 import loginController from "./module/auth/login/login.controller.js";
 import checkEmptyParamsLogin from "./module/auth/login/login.middleware.js";
 
+// log-out service
+import logoutController from "./module/auth/logout/logout.controller.js";
+
 // Password-services
 import {
   changePasswordController,
@@ -52,6 +55,9 @@ router.post(
   checkEmptyParamsLogin,
   loginController,
 );
+
+// log-out service
+router.post("/logout", authLimiter, verifyToken, logoutController);
 
 // forgot-password
 router.put(

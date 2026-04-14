@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import pool from "../common/db/db.config.js"; // Needed for the DB check
+import pool from "../../common/db/db.config.js";
 import APIError from "../../common/utils/api.error.js";
 
 const verifyToken = async (req, res, next) => {

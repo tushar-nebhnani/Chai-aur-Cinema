@@ -1,4 +1,4 @@
-import APIError from "../../../common/utils/api.error.js";
+import APIError from "../../../../common/utils/api.error.js";
 
 const checkEmptyParamsChangePass = (req, res, next) => {
   const { newPassword, oldPassword } = req.body;

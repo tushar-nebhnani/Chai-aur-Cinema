@@ -13,7 +13,7 @@ const baseTemplate = (title, content) => `
   </div>
 `;
 
-export const templates = {
+const templates = {
   // 1. REGISTER
   register: (name) =>
     baseTemplate(
@@ -89,3 +89,5 @@ export const templates = {
        <p>Take care!</p>`,
     ),
 };
+
+export default templates;

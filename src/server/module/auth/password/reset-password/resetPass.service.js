@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import pool from "../../../common/db/db.config.js";
-import APIError from "../../../common/utils/api.error.js";
-import PasswordUtils from "../../../common/utils/password.utils.js";
+import pool from "../../../../common/db/db.config.js";
+import APIError from "../../../../common/utils/api.error.js";
+import PasswordUtils from "../../../../common/utils/password.utils.js";
 import { sendChangePasswordMail } from "../../../../common/mail-service/email.service.js";
 
 const resetPassService = async (rawToken, newPassword) => {

@@ -2,6 +2,7 @@ import APIError from "../../../common/utils/api.error.js";
 import pool from "../../../common/db/db.config.js";
 import PasswordUtils from "../../../common/utils/password.utils.js";
 import JWTtokens from "../../../common/utils/jwt.utils.js";
+import NotificationService from "../../../common/notification-service/notification.service.js";
 
 const loginService = async (email, password, device = "Unknown device") => {
   try {
@@ -30,8 +31,9 @@ const loginService = async (email, password, device = "Unknown device") => {
 
     const token = JWTtokens.generateRefreshToken(payload);
 
+    NotificationService.sendLoginAlert(user.email, user.full_name);
+
     return {
-      token,
       user: {
         id: user.user_id,
         name: user.full_name,

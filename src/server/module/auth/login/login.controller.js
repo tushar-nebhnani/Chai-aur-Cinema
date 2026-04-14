@@ -7,16 +7,16 @@ const loginController = async (req, res) => {
 
     const user = await loginService(email, password);
 
-    res.cookie("accessToken", result.token, {
-      httpOnly: true, // Javascript cannot read this (prevents XSS)
-      secure: process.env.NODE_ENV === "production", // True in prod, false in dev
-      sameSite: "strict", // Prevents Cross-Site Request Forgery
-      maxAge: 24 * 60 * 60 * 1000, // Expires in 24 hours
+    res.cookie("accessToken", user.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return APIResponse.success(res, "User logged in successfully", user);
   } catch (error) {
-    console.error("Error while logging the user.");
+    console.error("Error while logging the user.", error);
   }
 };
 

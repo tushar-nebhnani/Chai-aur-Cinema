@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 // utilities
 import authLimiter from "./common/middleware/api.limiter.js";
 import validate from "./common/middleware/validate.middleware.js";
@@ -19,10 +20,16 @@ import LoginDTO from "./module/auth/login/login.dto.js";
 import loginController from "./module/auth/login/login.controller.js";
 import checkEmptyParamsLogin from "./module/auth/login/login.middleware.js";
 
+// Password-services
+import {
+  changePasswordController,
+  resetPasswordController,
+} from "./module/auth/password/password.controller.js";
 // change-password service
-import { changePasswordController } from "./module/auth/password/password.controller.js";
 import ChangePassDTO from "./module/auth/password/change-password/changePass.dto.js";
 import checkEmptyParamsChangePass from "./module/auth/password/change-password/changePass.middleware.js";
+// reset-password service
+import ResetPasswordDTO from "./module/auth/password/reset-password/resetPass.dto.js";
 
 // delete - service
 import deleteServiceController from "./module/auth/delete/delete.controller.js";
@@ -54,6 +61,15 @@ router.put(
   validate(ChangePassDTO),
   checkEmptyParamsChangePass,
   changePasswordController,
+);
+
+// reset-password
+router.put(
+  "/reset-password",
+  authLimiter,
+  verifyToken,
+  validate(ResetPasswordDTO),
+  resetPasswordController,
 );
 
 // delete-service

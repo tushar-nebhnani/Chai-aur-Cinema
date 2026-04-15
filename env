@@ -1,15 +1,1 @@
-PORT=4000
-NODE_ENV=devlopment
-DB_URI=postgresql://neondb_owner:npg_QS8bDPzFYc2T@ep-damp-frog-a1l18gpy-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-CLIENT_URL=http://localhost:3000
-
-JWT_ACCESS_SECRET_KEY="jai shree ram"
-JWT_REFRESH_SECRET_KEY="har har mahadev"
-
-JWT_ACCESS_EXPIRES_IN='15m'
-JWT_REFRESH_EXPIRES_IN='7d'
-
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=nebhnani.tushar8@gmail.com
-EMAIL_APP_PASSWORD=xmtaoxgkgqihcwgj
+Kuch bhi nhi milega!

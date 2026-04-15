@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: "http://127.0.0.1:5500",
@@ -12,7 +13,6 @@ app.use(
     credentials: true,
   }),
 );
-app.use(cookieParser());
 app.use("/bookmyshow", routes);
 
 app.use((err, req, res, next) => {

@@ -69,3 +69,4 @@ try {
 
 // Export for Vercel
 export default app;
+module.exports = app;

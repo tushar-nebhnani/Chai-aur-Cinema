@@ -1,3 +1,5 @@
+// Server entrypoint for standalone deployments and environment setup.
+
 import "dotenv/config";
 import app from "./src/server/app.js";
 import initializeDatabase from "./src/server/common/db/init-db.js";

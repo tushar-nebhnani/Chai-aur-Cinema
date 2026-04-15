@@ -75,7 +75,13 @@ class NotificationService {
     });
   }
 
-  static async sendTicketsBooked(toEmail, movieTitle, seats, time, amount) {
+  static async sendTicketsBooked(
+    toEmail,
+    movieTitle = "Dhurandhar- The Revenge",
+    seats,
+    time = Date.now(),
+    amount,
+  ) {
     return await this.#sendMail({
       to: toEmail,
       subject: `🎟️ Tickets Confirmed for ${movieTitle}!`,

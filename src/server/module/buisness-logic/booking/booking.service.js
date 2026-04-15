@@ -1,10 +1,14 @@
 import pool from "../../../common/db/db.config.js";
 import APIError from "../../../common/utils/api.error.js";
+import NotificationService from "../../../common/notification-service/notification.service.js";
 
 const bookingSeatService = async (showId, seatId, userId, price) => {
   const client = await pool.connect();
 
   try {
+    const sql = `SELECT * FROM users WHERE user_id=$1`;
+    const result = await pool.query(sql, [userId]);
+    const user = result.rows[0];
     await client.query("BEGIN");
 
     // 1. Fetch the actual INTEGER seat_id using the seat_number (e.g., 'E8')
@@ -45,6 +49,8 @@ const bookingSeatService = async (showId, seatId, userId, price) => {
     );
 
     await client.query("COMMIT");
+
+    NotificationService.sendTicketsBooked(user.email, seatId, price);
     return { bookingId: newBookingId, seatNumber: seatId };
   } catch (error) {
     await client.query("ROLLBACK");

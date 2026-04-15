@@ -5,22 +5,21 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use(express.json());
-app.use(cookieParser());
+// 1. Trust Proxy: Must be at the top for Vercel to see the real user IP
 app.set("trust proxy", 1);
 
-// 💡 1. Dynamic CORS: Allows your local frontend AND your Vercel frontend
+// 2. Single, Consolidated CORS Configuration
 const allowedOrigins = [
   "http://127.0.0.1:5500",
   "http://localhost:5500",
   "http://localhost:3000",
-  "https://chai-aur-cinema-pwv8.vercel.app",
-  "https://chai-aur-cinema-cupp.vercel.app", // 👈 Add your exact Vercel frontend URL here!
+  "https://chai-aur-cinema-cupp.vercel.app", // Your frontend
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps or curl)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -28,30 +27,28 @@ app.use(
       }
     },
     credentials: true,
-  }),
-);
-
-app.use(
-  cors({
-    origin: "https://chai-aur-cinema-cupp.vercel.app", // Use a string first to test!
-    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
   }),
 );
 
-// 💡 2. The Health Check Route (Fixes the Vercel 404 on the homepage)
+// 3. Body Parsers (Must come after CORS)
+app.use(express.json());
+app.use(cookieParser());
+
+// 4. Health Check
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "🎬 Chai Aur Cinema API is Live on Vercel!",
-    environment: process.env.NODE_ENV,
+    environment: "production",
   });
 });
 
-// Your main routing architecture
+// 5. Routes
 app.use("/bookmyshow", routes);
 
+// 6. Global Error Handler
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   console.error("[GlobalError]", {
@@ -65,18 +62,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-try {
-  if (process.env.NODE_ENV !== "production") {
-    const PORT = process.env.PORT || 4000;
-    app.listen(PORT, async () => {
-      // Ensure initializeDatabase is imported at the top if you use it here locally!
-      // await initializeDatabase();
-      console.log(`Server is running at port ${PORT} ...`);
-    });
-  }
-} catch (error) {
-  console.error("Error while starting the server", error);
+// Local Development Listen
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`Server is running at port ${PORT} ...`);
+  });
 }
 
-// Export for Vercel
 export default app;

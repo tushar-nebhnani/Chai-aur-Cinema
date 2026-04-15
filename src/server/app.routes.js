@@ -51,34 +51,29 @@ import getSeatsController from "./module/buisness-logic/get-seats/get-seats.cont
 // register-service
 router.post(
   "/register",
-  // authLimiter,
+  authLimiter,
   validate(RegisterDTO),
-  // checkExistingEmail,
-  // checkExistingUsername,
+  checkExistingEmail,
+  checkExistingUsername,
   registerController,
 );
 
 // login-service
 router.post(
   "/login",
-  // authLimiter,
+  authLimiter,
   validate(LoginDTO),
   checkEmptyParamsLogin,
   loginController,
 );
 
 // log-out service
-router.post(
-  "/logout",
-  // authLimiter,
-  verifyToken,
-  logoutController,
-);
+router.post("/logout", authLimiter, verifyToken, logoutController);
 
 // forgot-password
 router.put(
   "/change-password",
-  // authLimiter,
+  authLimiter,
   verifyToken,
   validate(ChangePassDTO),
   checkEmptyParamsChangePass,
@@ -88,7 +83,7 @@ router.put(
 // reset-password
 router.put(
   "/reset-password",
-  // authLimiter,
+  authLimiter,
   validate(ResetPasswordDTO),
   resetPasswordController,
 );
@@ -96,7 +91,7 @@ router.put(
 // delete-service
 router.delete(
   "/delete-account",
-  // authLimiter,
+  authLimiter,
   verifyToken,
   deleteServiceController,
 );
@@ -104,7 +99,7 @@ router.delete(
 // booking-seats service
 router.post(
   "/book-seats",
-  // authLimiter,
+  authLimiter,
   verifyToken,
   validate(BookingServiceDTO),
   bookingServiceController,

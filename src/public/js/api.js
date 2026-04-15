@@ -2,8 +2,8 @@ const isLocalhost =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1";
 const API_BASE_URL = isLocalhost
-  ? "http://localhost:4000/bookmyshow"
-  : "https://your-deployed-backend.com/api";
+  ? "http://127.0.0.1:4000/bookmyshow"
+  : "https://your-deployed-backend.com/bookmyshow";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

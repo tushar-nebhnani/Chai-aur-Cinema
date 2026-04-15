@@ -7,10 +7,8 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    // 1. Explicitly name the frontend origin (No trailing slash!)
     origin: "http://127.0.0.1:5500",
 
-    // 2. Explicitly allow credentials (cookies, authorization headers)
     credentials: true,
   }),
 );

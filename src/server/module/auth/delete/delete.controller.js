@@ -4,7 +4,7 @@ import APIResponse from "../../../common/utils/api.response.js";
 
 const deleteServiceController = async (req, res, next) => {
   try {
-    const userId = req.user?.user_id;
+    const userId = req.user?.id;
 
     if (!userId) {
       throw APIError.badRequest("User ID not found.");

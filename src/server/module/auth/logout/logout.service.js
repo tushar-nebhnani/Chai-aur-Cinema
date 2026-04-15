@@ -7,11 +7,9 @@ const logoutService = async (userId) => {
       userId,
     ]);
     const user = result.rows[0];
-    if (user) {
-      NotificationService.sendLogoutAlert(user.email, user.full_name);
-    }
+    NotificationService.sendLogoutAlert(user.email, user.full_name);
 
-    return true;
+    return user;
   } catch (error) {
     console.error("Error in logout service:", error);
     throw error;

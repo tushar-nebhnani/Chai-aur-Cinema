@@ -153,6 +153,15 @@ window.openProfileModal = function () {
   window.openModal("profileOv");
 };
 
+window.toggleTheme = function () {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+
+  // Update the button icon
+  const btn = document.getElementById("themeBtn");
+  if (btn) btn.textContent = dark ? "🌙" : "☀";
+};
+
 // ==========================================
 // MODALS & TOGGLES
 // ==========================================
@@ -235,13 +244,13 @@ window.doLogin = async function (event) {
 
 window.doRegister = async function (event) {
   event.preventDefault();
-  const full_name = document.getElementById("rName")?.value.trim(),
+  const username = document.getElementById("rName")?.value.trim(),
     email = document.getElementById("rEmail")?.value.trim();
   const password = document.getElementById("rPw")?.value,
     confirm = document.getElementById("rCf")?.value;
   const btn = document.getElementById("rBtn");
 
-  if (!full_name || !email || !password || !confirm)
+  if (!username || !email || !password || !confirm)
     return showToast("error", "Fill all fields.");
   if (password !== confirm)
     return showToast("error", "Passwords do not match.");
@@ -253,7 +262,7 @@ window.doRegister = async function (event) {
   }
 
   try {
-    await window.api.register({ full_name, email, password });
+    await window.api.register({ username, email, password });
     showToast("success", "Registration successful! Please sign in.");
     document.getElementById("regForm")?.reset();
     window.switchTab("login");
@@ -271,8 +280,12 @@ window.doRegister = async function (event) {
 window.logout = async function () {
   try {
     await window.api.logout();
+  } catch (error) {
+    console.error("Backend logout note (safe to ignore):", error);
+  } finally {
+    // 2. ALWAYS clear the frontend state, no matter what!
     currentUser = null;
-    localStorage.removeItem("chai_cinema_user"); // Clear storage
+    localStorage.removeItem("chai_cinema_user"); // Nuke the storage
 
     selected.clear();
     document.getElementById("authBtns").style.display = "flex";
@@ -283,9 +296,54 @@ window.logout = async function () {
     updateBar();
     renderGrid();
     showToast("info", "Signed out successfully.");
-  } catch (error) {
-    console.error("Logout Error:", error);
-    showToast("error", "Failed to sign out properly.");
+  }
+};
+
+window.userChangePw = async function () {
+  if (!currentUser) return;
+
+  const oldPw = prompt("Enter your current password:");
+  const newPw = prompt("Enter your new password (minimum 6 characters):");
+
+  if (newPw && newPw.length >= 6 && oldPw) {
+    try {
+      await window.api.changePassword({
+        oldPassword: oldPw,
+        newPassword: newPw,
+      });
+      showToast("success", "Your password has been securely updated.");
+    } catch (error) {
+      console.error("Change Password Error:", error);
+      const errorMsg =
+        error.response?.data?.message || "Failed to update password.";
+      showToast("error", errorMsg);
+    }
+  } else if (newPw || oldPw) {
+    alert(
+      "Please provide both passwords, and ensure the new one is at least 6 characters.",
+    );
+  }
+};
+
+window.userDeleteAccount = async function () {
+  if (!currentUser) return;
+
+  const confirmDelete = confirm(
+    "Are you sure you want to delete your account? This action cannot be undone.",
+  );
+
+  if (confirmDelete) {
+    try {
+      await window.api.deleteAccount();
+      window.closeModal("profileOv");
+      window.logout(); // This clears the UI and local storage instantly
+      showToast("success", "Your account has been permanently deleted.");
+    } catch (error) {
+      console.error("Delete Account Error:", error);
+      const errorMsg =
+        error.response?.data?.message || "Failed to delete account.";
+      showToast("error", errorMsg);
+    }
   }
 };
 

@@ -12,7 +12,7 @@ class EmailTemplates {
   static #baseTemplate(
     title,
     content,
-    previewText = "Notification from BookMyShow Clone",
+    previewText = "Notification from Chai aur Cinema",
   ) {
     return `
       <!DOCTYPE html>
@@ -33,7 +33,7 @@ class EmailTemplates {
                 
                 <tr>
                   <td style="background-color: ${this.primaryColor}; padding: 30px; text-align: center;">
-                    <h1 style="color: #ffffff; margin: 0; font-size: 26px; letter-spacing: 0.5px;">🎬 BookMyShow</h1>
+                    <h1 style="color: #ffffff; margin: 0; font-size: 26px; letter-spacing: 0.5px;">🎬 ChaiaurCineme</h1>
                   </td>
                 </tr>
                 
@@ -46,7 +46,7 @@ class EmailTemplates {
                 
                 <tr>
                   <td style="background-color: ${this.lightGray}; padding: 25px; text-align: center; color: #64748b; font-size: 13px; border-top: 1px solid #e2e8f0;">
-                    <p style="margin: 0;">&copy; ${new Date().getFullYear()} BookMyShow Clone. All rights reserved.</p>
+                    <p style="margin: 0;">&copy; ${new Date().getFullYear()} Chai aur Cinema. All rights reserved.</p>
                     <p style="margin: 8px 0 0 0;">Designed with logic & engineered for performance.</p>
                   </td>
                 </tr>

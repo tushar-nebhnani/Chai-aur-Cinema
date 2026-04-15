@@ -70,7 +70,7 @@ class NotificationService {
 
     return await this.#sendMail({
       to: toEmail,
-      subject: "New Login Detected",
+      subject: "New Logout Detected",
       html: EmailTemplates.logout(name, time),
     });
   }

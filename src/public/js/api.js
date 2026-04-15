@@ -3,7 +3,7 @@ const isLocalhost =
   window.location.hostname === "127.0.0.1";
 const API_BASE_URL = isLocalhost
   ? "http://127.0.0.1:4000/bookmyshow"
-  : "https://your-deployed-backend.com/bookmyshow";
+  : "https://chai-aur-cinema-pwv8.vercel.app/bookmyshow";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

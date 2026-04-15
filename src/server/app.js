@@ -28,4 +28,16 @@ app.use((err, req, res, next) => {
   });
 });
 
+try {
+  if (process.env.NODE_ENV !== "production") {
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, async () => {
+      await initializeDatabase();
+      console.log(`Server is running at port ${PORT} ...`);
+    });
+  }
+} catch (error) {
+  console.error("Error while starting the server", error);
+}
+
 export default app;

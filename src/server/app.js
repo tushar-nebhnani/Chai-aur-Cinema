@@ -15,7 +15,7 @@ const allowedOrigins = [
   "http://localhost:5500",
   "http://localhost:3000",
   "https://chai-aur-cinema-pwv8.vercel.app",
-  "https://chai-aur-cinema-cupp.vercel.app/", // 👈 Add your exact Vercel frontend URL here!
+  "https://chai-aur-cinema-cupp.vercel.app", // 👈 Add your exact Vercel frontend URL here!
 ];
 
 app.use(
@@ -28,6 +28,15 @@ app.use(
       }
     },
     credentials: true,
+  }),
+);
+
+app.use(
+  cors({
+    origin: "https://chai-aur-cinema-cupp.vercel.app", // Use a string first to test!
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 

@@ -14,7 +14,7 @@ const loginController = async (req, res, next) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return APIResponse.success(res, "User logged in successfully", user.user);
+    return APIResponse.success(res, "User logged in successfully", user);
   } catch (error) {
     console.error("[LoginController] Failed to log in user:", error);
     return next(error);

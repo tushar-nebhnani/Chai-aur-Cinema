@@ -208,22 +208,16 @@ window.doLogin = async function (event) {
 
   try {
     const response = await window.api.login({ email, password });
+    console.log("Backend Response", response);
 
-    // 1. Safely extract the data payload
-    const payload = response.data.data;
+    const user = response.data.data;
 
-    // 2. Handle both { data: { user: {...} } } AND { data: { id: 1, ... } }
-    const user = payload.user || payload;
-
-    // 3. Safely map specific database columns
     const finalName = user.full_name || user.name || user.email.split("@")[0];
     const finalId = user.user_id || user.id;
 
-    // 4. Save to LocalStorage
     currentUser = { name: finalName, email: user.email, id: finalId };
     localStorage.setItem("chai_cinema_user", JSON.stringify(currentUser));
 
-    // 5. Update UI
     checkLoginState();
     window.closeModal("authOv");
     showToast("success", `Welcome back, ${currentUser.name.split(" ")[0]}!`);

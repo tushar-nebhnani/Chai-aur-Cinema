@@ -14,7 +14,8 @@ const allowedOrigins = [
   "http://127.0.0.1:5500",
   "http://localhost:5500",
   "http://localhost:3000",
-  "https://chai-aur-cinema-pwv8.vercel.app", // 👈 Add your exact Vercel frontend URL here!
+  "https://chai-aur-cinema-pwv8.vercel.app",
+  "https://chai-aur-cinema-cupp.vercel.app/", // 👈 Add your exact Vercel frontend URL here!
 ];
 
 app.use(

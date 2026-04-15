@@ -8,8 +8,9 @@
       href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href="./css/style.css" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <style>
       .f-pw {
@@ -28,7 +29,6 @@
         color: var(--primary-hover);
         text-decoration: underline;
       }
-
       .uchip {
         cursor: pointer;
         transition: all 0.2s;
@@ -37,7 +37,6 @@
         border-color: var(--primary);
         box-shadow: 0 0 10px var(--primary-glow);
       }
-
       .admin-list {
         display: flex;
         flex-direction: column;
@@ -53,7 +52,6 @@
         background: var(--border-color);
         border-radius: 10px;
       }
-
       .u-row {
         display: flex;
         align-items: center;
@@ -88,7 +86,6 @@
         color: var(--primary);
         margin-left: 8px;
       }
-
       .u-acts {
         display: flex;
         gap: 8px;
@@ -118,8 +115,6 @@
         background-color: var(--red);
         color: white;
       }
-
-      /* Profile Action Buttons wrapper */
       .p-acts {
         display: flex;
         justify-content: center;
@@ -320,9 +315,7 @@
               type="email"
               id="lEmail"
               placeholder="you@example.com"
-              autocomplete="email"
             />
-            <div class="ferr" id="lEmailErr">Enter a valid email address.</div>
           </div>
           <div class="fg">
             <label class="fl" for="lPw">Password</label>
@@ -332,26 +325,10 @@
                 type="password"
                 id="lPw"
                 placeholder="Your password"
-                autocomplete="current-password"
               />
               <button type="button" class="eye" onclick="togglePw('lPw', this)">
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
+                👁
               </button>
-            </div>
-            <div class="ferr" id="lPwErr">
-              Password must be at least 6 characters.
             </div>
           </div>
           <div class="f-pw">
@@ -373,11 +350,7 @@
               type="text"
               id="rName"
               placeholder="Hitesh Choudhary"
-              autocomplete="name"
             />
-            <div class="ferr" id="rNameErr">
-              Name must be at least 2 characters.
-            </div>
           </div>
           <div class="fg">
             <label class="fl" for="rEmail">Email</label>
@@ -386,9 +359,7 @@
               type="email"
               id="rEmail"
               placeholder="you@example.com"
-              autocomplete="email"
             />
-            <div class="ferr" id="rEmailErr">Enter a valid email address.</div>
           </div>
           <div class="fg">
             <label class="fl" for="rPw">Password</label>
@@ -398,26 +369,10 @@
                 type="password"
                 id="rPw"
                 placeholder="Min. 6 characters"
-                autocomplete="new-password"
               />
               <button type="button" class="eye" onclick="togglePw('rPw', this)">
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
+                👁
               </button>
-            </div>
-            <div class="ferr" id="rPwErr">
-              Password must be at least 6 characters.
             </div>
           </div>
           <div class="fg">
@@ -428,25 +383,11 @@
                 type="password"
                 id="rCf"
                 placeholder="Repeat password"
-                autocomplete="new-password"
               />
               <button type="button" class="eye" onclick="togglePw('rCf', this)">
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
+                👁
               </button>
             </div>
-            <div class="ferr" id="rCfErr">Passwords don't match.</div>
           </div>
           <button type="submit" class="btn-sub" id="rBtn">
             Create Account
@@ -467,7 +408,6 @@
               id="fEmail"
               placeholder="Enter email to reset password"
             />
-            <div class="ferr" id="fEmailErr">Enter a valid email address.</div>
           </div>
           <button type="submit" class="btn-sub" id="fBtn">
             Send Reset Link
@@ -515,18 +455,6 @@
 
         <div class="pbtns">
           <button
-            class="btn-sub"
-            id="adminPanelBtn"
-            style="
-              display: none;
-              background: var(--accent);
-              box-shadow: 0 4px 15px var(--accent-glow);
-            "
-            onclick="openAdminModal()"
-          >
-            Open Admin Dashboard
-          </button>
-          <button
             class="btn-gf"
             onclick="
               logout();
@@ -539,514 +467,12 @@
       </div>
     </div>
 
-    <div class="ov" id="adminOv">
-      <div class="modal" style="max-width: 600px">
-        <button class="mx" onclick="closeModal('adminOv')">&#x2715;</button>
-        <div class="ptitle" style="margin-bottom: 8px">Admin Dashboard</div>
-        <div class="pdesc" style="margin-bottom: 24px">
-          Manage registered accounts and system access.
-        </div>
-
-        <div class="admin-list" id="adminUserList"></div>
-      </div>
-    </div>
-
     <div class="toast" id="toast">
       <div class="tdot"></div>
       <span id="toastTxt"></span>
     </div>
 
-    <script>
-      let dbUsers = [
-        { id: 1, name: "System Admin", email: "admin@chai.com", role: "admin" },
-        {
-          id: 2,
-          name: "Hitesh Choudhary",
-          email: "hitesh@chai.com",
-          role: "user",
-        },
-        { id: 3, name: "Piyush Garg", email: "piyush@chai.com", role: "user" },
-      ];
-
-      let currentUser = null,
-        seats = [],
-        selected = new Set();
-
-      const PRICE_STD = 220,
-        PRICE_PREM = 380,
-        PREMIUM = ["A", "B"],
-        ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"],
-        COLS = 10;
-
-      function renderSkeleton() {
-        const m = document.getElementById("seatMap");
-        let h = "";
-        ROWS.forEach((r) => {
-          if (r === "A")
-            h += `<div class="sec-h p">&#9733; Premium &mdash; &#8377;${PRICE_PREM}</div>`;
-          if (r === "C")
-            h += `<div class="sec-h">Standard &mdash; &#8377;${PRICE_STD}</div>`;
-          h += `<div class="seat-row"><div class="rlbl">${r}</div>`;
-          for (let c = 0; c < COLS; c++) {
-            if (c === 5) h += `<div class="seat gap"></div>`;
-            h += `<div class="skel"></div>`;
-          }
-          h += "</div>";
-        });
-        m.innerHTML = h;
-      }
-
-      async function fetchSeats() {
-        renderSkeleton();
-        try {
-          const r = await fetch("/seats");
-          if (!r.ok) throw 0;
-          seats = await r.json();
-        } catch {
-          seats = mockSeats();
-        }
-        renderGrid();
-      }
-
-      function mockSeats() {
-        return ROWS.flatMap((row) =>
-          Array.from({ length: COLS }, (_, i) => ({
-            id: `${row}${i + 1}`,
-            row,
-            col: i + 1,
-            bookedBy: Math.random() < 0.28 ? "Someone" : null,
-            isPremium: PREMIUM.includes(row),
-          })),
-        );
-      }
-
-      function renderGrid() {
-        const m = document.getElementById("seatMap");
-        const byRow = {};
-        seats.forEach((s) => {
-          if (!byRow[s.row]) byRow[s.row] = [];
-          byRow[s.row].push(s);
-        });
-        let h = "";
-        ROWS.forEach((row) => {
-          if (row === "A")
-            h += `<div class="sec-h p">&#9733; Premium &mdash; &#8377;${PRICE_PREM}</div>`;
-          if (row === "C")
-            h += `<div class="sec-h">Standard &mdash; &#8377;${PRICE_STD}</div>`;
-          const rs = (byRow[row] || []).sort((a, b) => a.col - b.col);
-          h += `<div class="seat-row"><div class="rlbl">${row}</div>`;
-          rs.forEach((s, i) => {
-            if (i === 5) h += `<div class="seat gap" aria-hidden="true"></div>`;
-            const bk = !!s.bookedBy,
-              sel = selected.has(s.id),
-              pr = PREMIUM.includes(s.row);
-            let cls = "seat";
-            if (bk) cls += " booked";
-            else if (sel) cls += " selected";
-            else if (pr) cls += " premium";
-            h += `<div class="${cls}" data-id="${s.id}" title="${bk ? "Booked" : "Seat " + s.id + (pr ? " (Premium)" : "")}" role="button" tabindex="${bk ? -1 : 0}" onclick="seatClick('${s.id}')"></div>`;
-          });
-          h += "</div>";
-        });
-        m.innerHTML = h;
-      }
-
-      function seatClick(id) {
-        const s = seats.find((x) => x.id === id);
-        if (!s || s.bookedBy) return;
-        if (!currentUser) {
-          openModal("promptOv");
-          return;
-        }
-        selected.has(id) ? selected.delete(id) : selected.add(id);
-        updateBar();
-        const el = document.querySelector(`[data-id="${id}"]`);
-        if (!el) return;
-        el.className =
-          "seat" +
-          (selected.has(id)
-            ? " selected"
-            : PREMIUM.includes(s.row)
-              ? " premium"
-              : "");
-      }
-
-      function updateBar() {
-        const bar = document.getElementById("bbar"),
-          n = selected.size;
-        if (!n) {
-          bar.classList.remove("show");
-          return;
-        }
-        let total = 0;
-        selected.forEach((id) => {
-          const s = seats.find((x) => x.id === id);
-          total += PREMIUM.includes(s?.row) ? PRICE_PREM : PRICE_STD;
-        });
-        document.getElementById("bSeats").textContent =
-          `${n} ticket${n > 1 ? "s" : ""} \u00b7 ${[...selected].join(", ")}`;
-        document.getElementById("bPrice").textContent =
-          `\u20b9${total.toLocaleString("en-IN")}`;
-        bar.classList.add("show");
-      }
-
-      async function handleConfirm() {
-        if (!currentUser || !selected.size) return;
-        const btn = document.getElementById("payBtn");
-        btn.innerHTML = '<span class="spin"></span>';
-        btn.disabled = true;
-        const ids = [...selected];
-        for (const id of ids) {
-          try {
-            const r = await fetch(
-              `/${id}/${encodeURIComponent(currentUser.name)}`,
-              { method: "PUT" },
-            );
-            if (!r.ok) throw 0;
-          } catch {}
-          const s = seats.find((x) => x.id === id);
-          if (s) s.bookedBy = currentUser.name;
-          selected.delete(id);
-        }
-        btn.innerHTML = "Pay Now";
-        btn.disabled = false;
-        updateBar();
-        renderGrid();
-        showToast(
-          "success",
-          `Booking confirmed! ${ids.length} seat${ids.length > 1 ? "s" : ""} reserved.`,
-        );
-      }
-
-      function doLogin(e) {
-        e.preventDefault();
-        clearErrs("l");
-        const email = document
-          .getElementById("lEmail")
-          .value.trim()
-          .toLowerCase();
-        const pw = document.getElementById("lPw").value;
-        let ok = true;
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          showErr("lEmailErr");
-          ok = false;
-        }
-        if (pw.length < 6) {
-          showErr("lPwErr");
-          ok = false;
-        }
-        if (!ok) return;
-
-        const btn = document.getElementById("lBtn");
-        btn.innerHTML = '<span class="spin"></span>';
-        btn.disabled = true;
-
-        setTimeout(() => {
-          btn.innerHTML = "Sign In";
-          btn.disabled = false;
-
-          let userObj = dbUsers.find((u) => u.email === email);
-          if (!userObj) {
-            const name = email
-              .split("@")[0]
-              .replace(/[._]/g, " ")
-              .replace(/\b\w/g, (c) => c.toUpperCase());
-            userObj = { id: Date.now(), name, email, role: "user" };
-            dbUsers.push(userObj);
-          }
-
-          loginUser(userObj);
-          closeModal("authOv");
-          showToast("success", `Welcome back, ${userObj.name.split(" ")[0]}!`);
-        }, 750);
-      }
-
-      function doForgot(e) {
-        e.preventDefault();
-        clearErrs("f");
-        const email = document.getElementById("fEmail").value.trim();
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          showErr("fEmailErr");
-          return;
-        }
-
-        const btn = document.getElementById("fBtn");
-        btn.innerHTML = '<span class="spin"></span>';
-        btn.disabled = true;
-
-        setTimeout(() => {
-          btn.innerHTML = "Send Reset Link";
-          btn.disabled = false;
-          closeModal("authOv");
-          showToast("info", `Reset link sent to ${email}`);
-        }, 800);
-      }
-
-      function loginUser(u) {
-        currentUser = u;
-        document.getElementById("authBtns").style.display = "none";
-        document.getElementById("userChip").style.display = "flex";
-
-        const initials = u.name
-          .split(" ")
-          .map((w) => w[0])
-          .join("")
-          .slice(0, 2)
-          .toUpperCase();
-        document.getElementById("uNm").textContent = u.name.split(" ")[0];
-        document.getElementById("uAv").textContent = initials;
-
-        renderGrid();
-      }
-
-      function logout() {
-        currentUser = null;
-        selected.clear();
-        document.getElementById("authBtns").style.display = "flex";
-        document.getElementById("userChip").style.display = "none";
-        document.getElementById("lEmail").value = "";
-        document.getElementById("lPw").value = "";
-        updateBar();
-        renderGrid();
-        showToast("info", "Signed out successfully.");
-      }
-
-      function togglePw(id, btn) {
-        const el = document.getElementById(id),
-          hide = el.type === "text";
-        el.type = hide ? "password" : "text";
-        btn.innerHTML = hide
-          ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
-          : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
-      }
-
-      // ---- NEW: User Profile Actions ----
-      function userChangePw() {
-        if (!currentUser) return;
-        const newPw = prompt("Enter your new password (minimum 6 characters):");
-
-        if (newPw && newPw.length >= 6) {
-          // In a real app, this would be an API call to update the DB
-          showToast("success", "Your password has been updated.");
-        } else if (newPw) {
-          alert("Password must be at least 6 characters long.");
-        }
-      }
-
-      function userDeleteAccount() {
-        if (!currentUser) return;
-
-        const confirmDelete = confirm(
-          "Are you sure you want to delete your account? This action cannot be undone.",
-        );
-
-        if (confirmDelete) {
-          // Remove user from the mock array
-          dbUsers = dbUsers.filter((u) => u.id !== currentUser.id);
-
-          // Release any seats they had booked in the mock grid
-          seats.forEach((s) => {
-            if (s.bookedBy === currentUser.name) {
-              s.bookedBy = null;
-            }
-          });
-
-          closeModal("profileOv");
-          logout(); // Signs them out and re-renders the grid
-          showToast("error", "Your account has been deleted.");
-        }
-      }
-
-      // ---- Profile & Admin Logic ----
-      function openProfileModal() {
-        if (!currentUser) return;
-
-        const initials = currentUser.name
-          .split(" ")
-          .map((w) => w[0])
-          .join("")
-          .slice(0, 2)
-          .toUpperCase();
-        document.getElementById("pAv").textContent = initials;
-        document.getElementById("pName").textContent = currentUser.name;
-        document.getElementById("pEmail").textContent = currentUser.email;
-
-        const adminBtn = document.getElementById("adminPanelBtn");
-        if (currentUser.role === "admin") {
-          adminBtn.style.display = "block";
-        } else {
-          adminBtn.style.display = "none";
-        }
-
-        openModal("profileOv");
-      }
-
-      function openAdminModal() {
-        closeModal("profileOv");
-        renderAdminList();
-        openModal("adminOv");
-      }
-
-      function renderAdminList() {
-        const listDiv = document.getElementById("adminUserList");
-        listDiv.innerHTML = "";
-
-        dbUsers.forEach((user) => {
-          const badgeHTML =
-            user.role === "admin" ? `<span class="u-badge">Admin</span>` : "";
-          const isMe = user.email === currentUser.email;
-
-          const row = document.createElement("div");
-          row.className = "u-row";
-          row.innerHTML = `
-                <div class="u-info">
-                    <div class="u-name">${user.name} ${badgeHTML}</div>
-                    <div class="u-email">${user.email}</div>
-                </div>
-                <div class="u-acts">
-                    <button class="btn-ic edit" onclick="adminChangePw(${user.id})" title="Change Password">P/W</button>
-                    ${!isMe ? `<button class="btn-ic del" onclick="adminDeleteUser(${user.id})" title="Delete User">Delete</button>` : ""}
-                </div>
-            `;
-          listDiv.appendChild(row);
-        });
-      }
-
-      function adminDeleteUser(userId) {
-        if (confirm("Are you sure you want to delete this user?")) {
-          dbUsers = dbUsers.filter((u) => u.id !== userId);
-
-          // Release seats booked by the deleted user
-          const deletedUser = dbUsers.find((u) => u.id === userId);
-          if (deletedUser) {
-            seats.forEach((s) => {
-              if (s.bookedBy === deletedUser.name) s.bookedBy = null;
-            });
-            renderGrid();
-          }
-
-          renderAdminList();
-          showToast("success", "User deleted.");
-        }
-      }
-
-      function adminChangePw(userId) {
-        const user = dbUsers.find((u) => u.id === userId);
-        const newPw = prompt(`Enter a new password for ${user.email}:`);
-        if (newPw && newPw.length >= 6) {
-          showToast("success", "Password updated for user.");
-        } else if (newPw) {
-          alert("Password must be at least 6 characters.");
-        }
-      }
-
-      function openModal(id) {
-        document.getElementById(id).classList.add("open");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeModal(id) {
-        document.getElementById(id).classList.remove("open");
-        document.body.style.overflow = "";
-      }
-
-      function openAuthModal(tab) {
-        switchTab(tab);
-        openModal("authOv");
-      }
-
-      function switchTab(tab) {
-        const isLog = tab === "login";
-        const isReg = tab === "register";
-        const isForg = tab === "forgot";
-
-        document.getElementById("loginForm").style.display = isLog
-          ? ""
-          : "none";
-        document.getElementById("regForm").style.display = isReg ? "" : "none";
-        document.getElementById("forgotForm").style.display = isForg
-          ? ""
-          : "none";
-
-        document.getElementById("authTabs").style.display = isForg
-          ? "none"
-          : "flex";
-
-        document.getElementById("tLogin").classList.toggle("active", isLog);
-        document.getElementById("tReg").classList.toggle("active", isReg);
-
-        if (isLog)
-          document.getElementById("authSub").textContent =
-            "Your next movie experience awaits.";
-        else if (isReg)
-          document.getElementById("authSub").textContent =
-            "Join free \u2014 no spam, we promise.";
-        else if (isForg)
-          document.getElementById("authSub").textContent =
-            "Don't worry, we'll help you get back in.";
-
-        clearErrs("l");
-        clearErrs("r");
-        clearErrs("f");
-      }
-
-      function showErr(id) {
-        document.getElementById(id).classList.add("show");
-      }
-
-      function clearErrs(p) {
-        document
-          .querySelectorAll(`[id^="${p}"][id$="Err"]`)
-          .forEach((e) => e.classList.remove("show"));
-      }
-
-      let toastT;
-      function showToast(type, msg) {
-        const t = document.getElementById("toast");
-        t.className = `toast ${type}`;
-        document.getElementById("toastTxt").textContent = msg;
-        t.classList.add("show");
-        clearTimeout(toastT);
-        toastT = setTimeout(() => t.classList.remove("show"), 3200);
-      }
-
-      document.querySelectorAll(".ov").forEach((o) =>
-        o.addEventListener("click", (e) => {
-          if (e.target === o) closeModal(o.id);
-        }),
-      );
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape")
-          document
-            .querySelectorAll(".ov.open")
-            .forEach((o) => closeModal(o.id));
-      });
-
-      document.querySelectorAll(".stb").forEach((b) =>
-        b.addEventListener("click", function () {
-          document
-            .querySelectorAll(".stb")
-            .forEach((x) => x.classList.remove("active"));
-          this.classList.add("active");
-          selected.clear();
-          updateBar();
-          fetchSeats();
-        }),
-      );
-
-      document.getElementById("themeBtn").addEventListener("click", () => {
-        const dark =
-          document.documentElement.getAttribute("data-theme") === "dark";
-        document.documentElement.setAttribute(
-          "data-theme",
-          dark ? "light" : "dark",
-        );
-        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀";
-      });
-
-      fetchSeats();
-    </script>
+    <script src="./js/api.js"></script>
+    <script src="./js/ui.js"></script>
   </body>
 </html>

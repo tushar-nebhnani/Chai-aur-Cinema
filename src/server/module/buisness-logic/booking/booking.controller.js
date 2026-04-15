@@ -1,6 +1,5 @@
 import bookingService from "./booking.service.js";
-import APIResponse from "../../common/utils/api.response.js";
-
+import APIError from "../../../common/utils/api.error.js";
 const bookingServiceController = async (req, res, next) => {
   try {
     const userId = req.user.id;

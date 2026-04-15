@@ -8,16 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/bookmyshow/(.*)",
-      "dest": "/src/server/app.js"
-    },
-    {
-      "src": "/",
-      "dest": "/src/public/index.html"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/src/public/$1"
+      "dest": "/src/server/app.js"
     }
   ]
 }

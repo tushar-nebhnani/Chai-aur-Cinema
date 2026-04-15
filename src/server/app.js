@@ -7,6 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.set("trust proxy", 1);
 
 // 💡 1. Dynamic CORS: Allows your local frontend AND your Vercel frontend
 const allowedOrigins = [

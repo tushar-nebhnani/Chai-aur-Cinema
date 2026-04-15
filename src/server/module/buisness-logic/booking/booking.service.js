@@ -1,19 +1,19 @@
 import pool from "../../../common/db/db.config.js";
 import APIError from "../../../common/utils/api.error.js";
 
-const bookingSeatService = async (userId, showId, seatNumber) => {
+const bookingSeatService = async (showId, seatId, userId, price) => {
   const client = await pool.connect();
 
   try {
     await client.query("BEGIN");
 
-    const seatQuery = `
-      SELECT seat_id 
-      FROM seats 
-      WHERE show_id = $1 AND seat_number = $2 AND is_booked = FALSE 
+    // 1. Fetch the actual INTEGER seat_id using the seat_number (e.g., 'E8')
+    const seatLockSql = `
+      SELECT seat_id FROM seats 
+      WHERE showtime_id = $1 AND UPPER(seat_number) = UPPER($2) AND is_booked = FALSE
       FOR UPDATE
     `;
-    const seatResult = await client.query(seatQuery, [showId, seatNumber]);
+    const seatResult = await client.query(seatLockSql, [showId, seatId]);
 
     if (seatResult.rowCount === 0) {
       throw APIError.badRequest(
@@ -21,34 +21,36 @@ const bookingSeatService = async (userId, showId, seatNumber) => {
       );
     }
 
-    const seatId = seatResult.rows[0].seat_id;
+    const internalSeatId = seatResult.rows[0].seat_id;
 
-    const updateSeatQuery = `
-      UPDATE seats 
-      SET is_booked = TRUE, booked_by = $1 
-      WHERE seat_id = $2
+    const bookingSql = `
+      INSERT INTO bookings (user_id, showtime_id, total_amount, payment_status)
+      VALUES ($1, $2, $3, 'SUCCESS')
+      RETURNING booking_id
     `;
-    await client.query(updateSeatQuery, [userId, seatId]);
-
-    const insertBookingQuery = `
-      INSERT INTO bookings (user_id, seat_id, show_id) 
-      VALUES ($1, $2, $3) 
-      RETURNING *;
-    `;
-    const bookingResult = await client.query(insertBookingQuery, [
+    const bookingResult = await client.query(bookingSql, [
       userId,
-      seatId,
       showId,
+      price,
+    ]);
+    const newBookingId = bookingResult.rows[0].booking_id;
+
+    await client.query("UPDATE seats SET is_booked = TRUE WHERE seat_id = $1", [
+      internalSeatId,
     ]);
 
+    await client.query(
+      "INSERT INTO booking_seats (booking_id, seat_id) VALUES ($1, $2)",
+      [newBookingId, internalSeatId],
+    );
+
     await client.query("COMMIT");
-    return bookingResult.rows[0];
+    return { bookingId: newBookingId, seatNumber: seatId };
   } catch (error) {
     await client.query("ROLLBACK");
-    console.error("Booking Transaction Failed:", error);
-
-    if (error instanceof APIError) throw error;
-    throw APIError.serverError("Server failed to process the booking.");
+    console.error("🚨 BOOKING ERROR:", error.message);
+    if (error.status === 400) throw error;
+    throw APIError.serverError("Booking failed.");
   } finally {
     client.release();
   }

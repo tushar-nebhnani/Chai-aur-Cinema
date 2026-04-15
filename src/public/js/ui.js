@@ -2,6 +2,7 @@ let currentUser = JSON.parse(localStorage.getItem("chai_cinema_user")) || null;
 let seats = [];
 let selected = new Set();
 let toastT;
+let currentShowId = 1; // 👈 Tracker for the active showtime
 
 const PRICE_STD = 220,
   PRICE_PREM = 380;
@@ -60,12 +61,25 @@ function renderGrid() {
       if (bk) cls += " booked";
       else if (sel) cls += " selected";
       else if (pr) cls += " premium";
-      h += `<div class="${cls}" data-id="${s.id}" title="${bk ? "Booked" : "Seat " + s.id}" onclick="window.seatClick('${s.id}')"></div>`;
+      h += `<div class="${cls}" data-id="${s.id}" title="${bk ? "Booked by " + s.bookedBy : "Seat " + s.id}" onclick="window.seatClick('${s.id}')"></div>`;
     });
     h += "</div>";
   });
   m.innerHTML = h;
 }
+
+// 👈 New function to handle switching between the 4 shows
+window.changeShow = function (showId, btn) {
+  document
+    .querySelectorAll(".stb")
+    .forEach((b) => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  currentShowId = showId;
+  selected.clear();
+  updateBar();
+  fetchSeats(showId);
+};
 
 window.seatClick = function (id) {
   const s = seats.find((x) => x.id === id);
@@ -113,7 +127,6 @@ function showToast(type, msg) {
 }
 
 function checkLoginState() {
-  // Added a safety check: Only run this if currentUser AND currentUser.name exist
   if (currentUser && currentUser.name) {
     document.getElementById("authBtns").style.display = "none";
     document.getElementById("userChip").style.display = "flex";
@@ -128,14 +141,12 @@ function checkLoginState() {
     document.getElementById("uNm").textContent = currentUser.name.split(" ")[0];
     document.getElementById("uAv").textContent = initials;
   } else {
-    // If the data is corrupted, clear it out silently so the app doesn't break
     localStorage.removeItem("chai_cinema_user");
     currentUser = null;
   }
 }
 
 window.openProfileModal = function () {
-  // Added a fallback string just in case the name is missing
   if (!currentUser) return;
 
   const safeName = currentUser.name || "Guest User";
@@ -157,7 +168,6 @@ window.toggleTheme = function () {
   const dark = document.documentElement.getAttribute("data-theme") === "dark";
   document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
 
-  // Update the button icon
   const btn = document.getElementById("themeBtn");
   if (btn) btn.textContent = dark ? "🌙" : "☀";
 };
@@ -217,8 +227,6 @@ window.doLogin = async function (event) {
 
   try {
     const response = await window.api.login({ email, password });
-    console.log("Backend Response", response);
-
     const user = response.data.data;
 
     const finalName = user.full_name || user.name || user.email.split("@")[0];
@@ -244,13 +252,13 @@ window.doLogin = async function (event) {
 
 window.doRegister = async function (event) {
   event.preventDefault();
-  const username = document.getElementById("rName")?.value.trim(),
+  const full_name = document.getElementById("rName")?.value.trim(),
     email = document.getElementById("rEmail")?.value.trim();
   const password = document.getElementById("rPw")?.value,
     confirm = document.getElementById("rCf")?.value;
   const btn = document.getElementById("rBtn");
 
-  if (!username || !email || !password || !confirm)
+  if (!full_name || !email || !password || !confirm)
     return showToast("error", "Fill all fields.");
   if (password !== confirm)
     return showToast("error", "Passwords do not match.");
@@ -262,7 +270,7 @@ window.doRegister = async function (event) {
   }
 
   try {
-    await window.api.register({ username, email, password });
+    await window.api.register({ full_name, email, password });
     showToast("success", "Registration successful! Please sign in.");
     document.getElementById("regForm")?.reset();
     window.switchTab("login");
@@ -283,15 +291,16 @@ window.logout = async function () {
   } catch (error) {
     console.error("Backend logout note (safe to ignore):", error);
   } finally {
-    // 2. ALWAYS clear the frontend state, no matter what!
     currentUser = null;
-    localStorage.removeItem("chai_cinema_user"); // Nuke the storage
+    localStorage.removeItem("chai_cinema_user");
 
     selected.clear();
     document.getElementById("authBtns").style.display = "flex";
     document.getElementById("userChip").style.display = "none";
-    document.getElementById("lEmail").value = "";
-    document.getElementById("lPw").value = "";
+    if (document.getElementById("lEmail"))
+      document.getElementById("lEmail").value = "";
+    if (document.getElementById("lPw"))
+      document.getElementById("lPw").value = "";
 
     updateBar();
     renderGrid();
@@ -301,7 +310,6 @@ window.logout = async function () {
 
 window.userChangePw = async function () {
   if (!currentUser) return;
-
   const oldPw = prompt("Enter your current password:");
   const newPw = prompt("Enter your new password (minimum 6 characters):");
 
@@ -314,46 +322,41 @@ window.userChangePw = async function () {
       showToast("success", "Your password has been securely updated.");
     } catch (error) {
       console.error("Change Password Error:", error);
-      const errorMsg =
-        error.response?.data?.message || "Failed to update password.";
-      showToast("error", errorMsg);
+      showToast(
+        "error",
+        error.response?.data?.message || "Failed to update password.",
+      );
     }
-  } else if (newPw || oldPw) {
-    alert(
-      "Please provide both passwords, and ensure the new one is at least 6 characters.",
-    );
   }
 };
 
 window.userDeleteAccount = async function () {
   if (!currentUser) return;
-
-  const confirmDelete = confirm(
-    "Are you sure you want to delete your account? This action cannot be undone.",
-  );
-
+  const confirmDelete = confirm("Are you sure? This action cannot be undone.");
   if (confirmDelete) {
     try {
       await window.api.deleteAccount();
       window.closeModal("profileOv");
-      window.logout(); // This clears the UI and local storage instantly
+      window.logout();
       showToast("success", "Your account has been permanently deleted.");
     } catch (error) {
       console.error("Delete Account Error:", error);
-      const errorMsg =
-        error.response?.data?.message || "Failed to delete account.";
-      showToast("error", errorMsg);
+      showToast(
+        "error",
+        error.response?.data?.message || "Failed to delete account.",
+      );
     }
   }
 };
 
-async function fetchSeats() {
+async function fetchSeats(showId = currentShowId) {
   renderSkeleton();
   try {
-    const response = await window.api.getSeats(1);
+    const response = await window.api.getSeats(showId);
     seats = response.data.data;
   } catch (error) {
     console.error("Failed to fetch seats", error);
+    // Fallback locally generated grid if API fails
     seats = ROWS.flatMap((row) =>
       Array.from({ length: COLS }, (_, i) => ({
         id: `${row}${i + 1}`,
@@ -378,9 +381,19 @@ window.handleConfirm = async function () {
 
   for (const seatNumber of ids) {
     try {
-      await window.api.bookSeats({ showId: 1, seatNumber });
-      const s = seats.find((x) => x.id === seatNumber);
-      if (s) s.bookedBy = currentUser.name;
+      // 👈 Passing currentShowId and matching column names for the price calculation
+      const seatData = seats.find((s) => s.id === seatNumber);
+      const seatPrice = PREMIUM.includes(seatData?.row)
+        ? PRICE_PREM
+        : PRICE_STD;
+
+      await window.api.bookSeats({
+        showId: currentShowId,
+        seatNumber: seatNumber,
+        price: seatPrice,
+      });
+
+      if (seatData) seatData.bookedBy = currentUser.name;
       selected.delete(seatNumber);
     } catch (error) {
       console.error("Booking Error:", error);
@@ -405,8 +418,8 @@ window.handleConfirm = async function () {
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  checkLoginState(); // Restores UI if user is in LocalStorage
-  fetchSeats();
+  checkLoginState();
+  fetchSeats(currentShowId); // 👈 Pass initial show ID
 
   document.querySelectorAll(".ov").forEach((o) =>
     o.addEventListener("click", (e) => {

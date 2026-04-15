@@ -40,8 +40,13 @@ import ResetPasswordDTO from "./module/auth/password/reset-password/resetPass.dt
 import deleteServiceController from "./module/auth/delete/delete.controller.js";
 
 // BUSINESS LOGIC
+
+// booking-service
 import bookingServiceController from "./module/buisness-logic/booking/booking.controller.js";
 import BookingServiceDTO from "./module/buisness-logic/booking/booking.dto.js";
+
+// get-seats service
+import getSeatsController from "./module/buisness-logic/get-seats/get-seats.controller.js";
 
 // register-service
 router.post(
@@ -99,10 +104,13 @@ router.delete(
 // booking-seats service
 router.post(
   "/book-seats",
-  authLimiter,
+  // authLimiter,
   verifyToken,
   validate(BookingServiceDTO),
   bookingServiceController,
 );
+
+// get-seats service
+router.get("/get-seats", authLimiter, getSeatsController);
 
 export default router;

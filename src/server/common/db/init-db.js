@@ -98,6 +98,51 @@ const initializeDatabase = async () => {
             seat_id INTEGER REFERENCES seats(seat_id)
         )
     `);
+
+    await pool.query(`
+      INSERT INTO movies (movie_id, title, language, genre, duration_mins)
+      VALUES (1, 'Interstellar', 'English', 'Sci-Fi', 169)
+      ON CONFLICT (movie_id) DO NOTHING
+    `);
+
+    // Insert a Theater
+    await pool.query(`
+      INSERT INTO theaters (theater_id, name, city)
+      VALUES (1, 'Inox: PVR Udaipur Central', 'Udaipur')
+      ON CONFLICT (theater_id) DO NOTHING
+    `);
+
+    // Insert a Screen
+    await pool.query(`
+      INSERT INTO screens (screen_id, theater_id, screen_name, total_capacity)
+      VALUES (1, 1, 'Audi 1', 80)
+      ON CONFLICT (screen_id) DO NOTHING
+    `);
+
+    // Insert 4 Showtimes
+    await pool.query(`
+      INSERT INTO showtimes (showtime_id, movie_id, screen_id, start_time, base_price)
+      VALUES 
+      (1, 1, 1, '2026-04-15 10:00:00', 220.00),
+      (2, 1, 1, '2026-04-15 13:30:00', 220.00),
+      (3, 1, 1, '2026-04-15 16:45:00', 220.00),
+      (4, 1, 1, '2026-04-15 20:00:00', 220.00)
+      ON CONFLICT (showtime_id) DO NOTHING
+    `);
+
+    // 9. CRITICAL: Generate 80 Seats for EACH Showtime
+    // This uses a CROSS JOIN to generate A1-H10 for all 4 showtimes automatically
+    //
+    await pool.query(`
+      INSERT INTO seats (showtime_id, seat_number, is_booked)
+      SELECT s.showtime_id, r.row_name || c.col_num, FALSE
+      FROM showtimes s
+      CROSS JOIN (SELECT unnest(ARRAY['A','B','C','D','E','F','G','H']) as row_name) r
+      CROSS JOIN (SELECT generate_series(1,10) as col_num) c
+      ON CONFLICT (showtime_id, seat_number) DO NOTHING
+    `);
+
+    console.log("✅ Seed data processed successfully.");
     console.log("✅ Booking-Seats mapping created.");
 
     console.log("🎉 Database setup complete!");

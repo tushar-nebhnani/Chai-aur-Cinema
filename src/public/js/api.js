@@ -25,5 +25,6 @@ window.api = {
 
   // Business Logic
   bookSeats: async (data) => await apiClient.post("/book-seats", data),
-  getSeats: async (showId) => await apiClient.get(`/seats?showId=${showId}`),
+  getSeats: async (showId) =>
+    await apiClient.get(`/get-seats?showId=${showId}`),
 };

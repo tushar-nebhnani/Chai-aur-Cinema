@@ -39,4 +39,4 @@ This repository contains the foundational version of a BookMyShow-style web appl
 
 ## Notes
 
-This is version 1.0.0 Beta and represents the foundation of the app. Additional features and refinements can be added in future releases.
+This is version 1.0.0 Beta and represents the foundation of the app. Additional features and refinements will be added in future releases. Stay Tuned! Will make this crazy. Before you begin exploring don't expect it to be perfect, the project is in progress.
